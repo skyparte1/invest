@@ -1,14 +1,110 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <meta name="description" content="Invest: educação financeira acessível para quem quer aprender a investir com mais consciência.">
+    <title>Invest | Educação financeira para iniciantes</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%231857c9'/%3E%3Cpath d='M29 16h8v32h-8z' fill='white'/%3E%3C/svg%3E">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/style.css">
 </head>
-
 <body>
+    <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+    <header class="site-header sticky-top">
+        <nav class="navbar navbar-expand-lg" aria-label="Navegação principal">
+            <div class="container">
+                <a class="navbar-brand" href="#inicio" aria-label="Invest — página inicial"><span class="brand-mark" aria-hidden="true">I</span>Invest</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Abrir menu de navegação"><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="mainNav">
+                    <ul class="navbar-nav mx-auto mb-3 mb-lg-0">
+                        <li class="nav-item"><a class="nav-link" href="#inicio">Início</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#aprender">Aprender</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#investimentos">Investimentos</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#como-funciona">Simulador</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#planejamento">Planejamento</a></li>
+                    </ul>
+                    <div class="nav-actions d-flex flex-column flex-lg-row gap-2">
+                        <a class="btn btn-link" href="#conta">Entrar</a><a class="btn btn-primary" href="#conta">Criar conta</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
 
+    <main id="conteudo">
+        <section class="hero" id="inicio">
+            <div class="container"><div class="row align-items-center g-5">
+                <div class="col-lg-7">
+                    <span class="eyebrow">Educação financeira descomplicada</span>
+                    <h1>Aprenda a investir com mais consciência.</h1>
+                    <p class="hero-lead">Educação financeira, investimentos e ferramentas práticas em um único lugar.</p>
+                    <div class="d-flex flex-column flex-sm-row gap-3 mt-4"><a class="btn btn-primary btn-lg" href="#aprender">Começar agora</a><a class="btn btn-outline-primary btn-lg" href="#como-funciona">Conhecer a plataforma</a></div>
+                    <p class="hero-note">Conhecimento para apoiar suas escolhas, no seu ritmo e sem complicação.</p>
+                </div>
+                <div class="col-lg-5" aria-hidden="true">
+                    <div class="hero-visual">
+                        <div class="visual-card visual-card-main"><span class="visual-label">Sua jornada</span><strong>Conhecimento que cresce com você</strong><div class="progress-steps"><span class="active"></span><span class="active"></span><span></span><span></span></div></div>
+                        <div class="visual-card visual-card-small"><span class="visual-icon">✓</span><span><strong>Passo a passo</strong><small>Conteúdo claro e prático</small></span></div>
+                        <div class="visual-orbit orbit-one"></div><div class="visual-orbit orbit-two"></div>
+                    </div>
+                </div>
+            </div></div>
+        </section>
+
+        <section class="section" id="aprender" aria-labelledby="beneficios-title">
+            <div class="container">
+                <div class="section-heading text-center"><span class="eyebrow">Tudo em um só lugar</span><h2 id="beneficios-title">Construa uma base financeira mais sólida</h2><p>Do primeiro conceito ao planejamento dos seus objetivos, a Invest acompanha cada etapa do aprendizado.</p></div>
+                <div class="row g-4">
+                    <div class="col-sm-6 col-lg-3"><article class="benefit-card h-100"><span class="card-icon" aria-hidden="true">01</span><h3>Aprenda</h3><p>Conteúdos de educação financeira desenvolvidos para iniciantes.</p></article></div>
+                    <div class="col-sm-6 col-lg-3"><article class="benefit-card h-100"><span class="card-icon" aria-hidden="true">02</span><h3>Conheça</h3><p>Entenda diferentes modalidades de investimento, riscos e características.</p></article></div>
+                    <div class="col-sm-6 col-lg-3"><article class="benefit-card h-100"><span class="card-icon" aria-hidden="true">03</span><h3>Simule</h3><p>Visualize cenários hipotéticos de investimento por meio de ferramentas interativas.</p></article></div>
+                    <div class="col-sm-6 col-lg-3"><article class="benefit-card h-100"><span class="card-icon" aria-hidden="true">04</span><h3>Planeje</h3><p>Organize sua vida financeira e estabeleça objetivos.</p></article></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section section-soft" id="como-funciona" aria-labelledby="steps-title">
+            <div class="container">
+                <div class="section-heading"><span class="eyebrow">Como funciona</span><h2 id="steps-title">Uma jornada simples, feita para você avançar</h2></div>
+                <ol class="journey row g-4 list-unstyled">
+                    <li class="col-md-6 col-lg-3"><div class="journey-step"><span>1</span><div><h3>Aprenda</h3><p>Comece pelos conceitos essenciais.</p></div></div></li>
+                    <li class="col-md-6 col-lg-3"><div class="journey-step"><span>2</span><div><h3>Conheça</h3><p>Explore opções e características.</p></div></div></li>
+                    <li class="col-md-6 col-lg-3"><div class="journey-step"><span>3</span><div><h3>Simule</h3><p>Observe cenários hipotéticos.</p></div></div></li>
+                    <li class="col-md-6 col-lg-3"><div class="journey-step"><span>4</span><div><h3>Planeje</h3><p>Transforme conhecimento em objetivos.</p></div></div></li>
+                </ol>
+            </div>
+        </section>
+
+        <section class="section" id="investimentos" aria-labelledby="investments-title">
+            <div class="container">
+                <div class="row align-items-end mb-5 g-3"><div class="col-lg-7"><span class="eyebrow">Explore possibilidades</span><h2 id="investments-title">Conheça diferentes tipos de investimento</h2></div><div class="col-lg-5"><p class="section-intro">Conteúdos objetivos para ajudar você a compreender como cada modalidade funciona.</p></div></div>
+                <div class="investment-grid">
+                    <article class="investment-card"><span>Renda fixa</span><h3>Poupança</h3><p>Conheça suas principais características.</p></article>
+                    <article class="investment-card"><span>Renda fixa</span><h3>Tesouro Selic</h3><p>Entenda o funcionamento desta modalidade.</p></article>
+                    <article class="investment-card"><span>Renda fixa</span><h3>CDB</h3><p>Aprenda os conceitos básicos desse investimento.</p></article>
+                    <article class="investment-card"><span>Renda fixa</span><h3>LCI/LCA</h3><p>Explore características e pontos de atenção.</p></article>
+                    <article class="investment-card"><span>Fundos</span><h3>Fundos de investimento</h3><p>Compreenda sua estrutura e funcionamento.</p></article>
+                    <article class="investment-card"><span>Renda variável</span><h3>Fundos imobiliários</h3><p>Conheça seus conceitos essenciais.</p></article>
+                    <article class="investment-card"><span>Renda variável</span><h3>Ações</h3><p>Descubra os fundamentos desta modalidade.</p></article>
+                </div>
+            </div>
+        </section>
+
+        <section class="section pt-0" aria-labelledby="notice-title"><div class="container"><div class="education-notice"><span class="notice-symbol" aria-hidden="true">i</span><div><h2 id="notice-title">Informação para escolhas mais conscientes</h2><p>A Invest é uma plataforma de caráter educacional e informativo. As informações e simulações apresentadas não representam recomendação de investimento ou garantia de rentabilidade.</p></div></div></div></section>
+
+        <section class="cta-section" id="planejamento" aria-labelledby="cta-title"><div class="container text-center" id="conta"><span class="eyebrow eyebrow-light">Seu próximo passo</span><h2 id="cta-title">Comece sua jornada financeira.</h2><p>Aprenda conceitos, explore investimentos e desenvolva uma relação mais consciente com o seu dinheiro.</p><a class="btn btn-light btn-lg" href="#inicio">Criar conta gratuitamente</a></div></section>
+    </main>
+
+    <footer class="site-footer"><div class="container">
+        <div class="row gy-4 align-items-start"><div class="col-lg-4"><a class="navbar-brand footer-brand" href="#inicio"><span class="brand-mark" aria-hidden="true">I</span>Invest</a><p>Educação financeira clara para decisões mais conscientes.</p></div><div class="col-lg-8"><nav class="footer-nav" aria-label="Navegação do rodapé"><a href="#inicio">Sobre</a><a href="#aprender">Educação financeira</a><a href="#investimentos">Investimentos</a><a href="#">Termos</a><a href="#">Privacidade</a><a href="#academic-note">Projeto acadêmico</a></nav></div></div>
+        <div class="footer-bottom" id="academic-note"><small>Projeto acadêmico desenvolvido para Trabalho de Conclusão de Curso.</small><small>&copy; <span id="current-year">2026</span> Invest.</small></div>
+    </div></footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <script src="js/main.js"></script>
 </body>
-
 </html>
