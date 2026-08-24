@@ -33,6 +33,13 @@
                     </div>
                 </header>
 
+                @auth
+                    <form method="POST" action="{{ $isCompleted ? route('learn.progress.destroy', $content) : route('learn.progress.store', $content) }}" class="mb-4">
+                        @csrf @method($isCompleted ? 'DELETE' : 'PUT')
+                        <button class="btn {{ $isCompleted ? 'btn-outline-primary' : 'btn-primary' }}" type="submit">{{ $isCompleted ? 'Desfazer conclusão' : 'Marcar como concluído' }}</button>
+                    </form>
+                @endauth
+
                 <div class="article-body">
                     {!! $bodyHtml !!}
                 </div>

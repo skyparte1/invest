@@ -1,10 +1,16 @@
 <?php
 
+use App\Http\Controllers\Admin\ContentController as AdminContentController;
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\InvestmentController as AdminInvestmentController;
+use App\Http\Controllers\Admin\SourceController as AdminSourceController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\ContentProgressController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FinancialPlanningController;
 use App\Http\Controllers\InvestmentController;
+use App\Http\Controllers\InvestmentFavoriteController;
 use App\Http\Controllers\LearningController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SimulationController;
@@ -34,6 +40,10 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
+    Route::put('/aprender/{content:slug}/progresso', [ContentProgressController::class, 'store'])->name('learn.progress.store');
+    Route::delete('/aprender/{content:slug}/progresso', [ContentProgressController::class, 'destroy'])->name('learn.progress.destroy');
+    Route::put('/investimentos/{investment:slug}/favorito', [InvestmentFavoriteController::class, 'store'])->name('investments.favorite.store');
+    Route::delete('/investimentos/{investment:slug}/favorito', [InvestmentFavoriteController::class, 'destroy'])->name('investments.favorite.destroy');
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
     Route::get('/perfil', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/perfil', [ProfileController::class, 'update'])->name('profile.update');
@@ -45,4 +55,11 @@ Route::middleware('auth')->group(function () {
     Route::match(['put', 'patch'], '/planejamento/{financialGoal}', [FinancialPlanningController::class, 'update'])->name('planning.update');
     Route::delete('/planejamento/{financialGoal}', [FinancialPlanningController::class, 'destroy'])->name('planning.destroy');
     Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
+
+    Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
+        Route::get('/', AdminDashboardController::class)->name('dashboard');
+        Route::resource('conteudos', AdminContentController::class)->parameters(['conteudos' => 'content'])->except('show');
+        Route::resource('investimentos', AdminInvestmentController::class)->parameters(['investimentos' => 'investment'])->except('show');
+        Route::resource('fontes', AdminSourceController::class)->parameters(['fontes' => 'source'])->except('show');
+    });
 });

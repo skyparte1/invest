@@ -16,6 +16,7 @@
                         <a class="btn btn-link" href="{{ route('login') }}">Entrar</a>
                         <a class="btn btn-primary" href="{{ route('register') }}">Criar conta</a>
                     @else
+                        @if (auth()->user()->is_admin)<a class="btn btn-link" href="{{ route('admin.dashboard') }}" @if (request()->routeIs('admin.*')) aria-current="page" @endif>Administração</a>@endif
                         <a class="btn btn-link" href="{{ route('dashboard') }}" @if (request()->routeIs('dashboard')) aria-current="page" @endif>Dashboard</a>
                         <a class="btn btn-link" href="{{ route('profile.edit') }}" @if (request()->routeIs('profile.*')) aria-current="page" @endif>Perfil</a>
                         <form method="POST" action="{{ route('logout') }}">

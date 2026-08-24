@@ -16,12 +16,15 @@ class InvestmentController extends Controller
         $selectedCategory = $categories->firstWhere('slug', $request->string('categoria')->trim()->toString());
         $requestedRisk = $request->string('risco')->trim()->toString();
         $selectedRisk = in_array($requestedRisk, Investment::RISK_LEVELS, true) ? $requestedRisk : null;
+        $favoriteIds = $request->user()?->favoriteInvestments()->pluck('investments.id') ?? collect();
+        $favoritesOnly = $request->user() && $request->boolean('favoritos');
 
         $investments = Investment::query()
             ->published()
             ->with('category')
             ->when($selectedCategory, fn ($query) => $query->whereBelongsTo($selectedCategory, 'category'))
             ->when($selectedRisk, fn ($query) => $query->where('risk_level', $selectedRisk))
+            ->when($favoritesOnly, fn ($query) => $query->whereIn('id', $favoriteIds))
             ->orderBy('investment_category_id')
             ->orderBy('sort_order')
             ->orderBy('name')
@@ -29,10 +32,10 @@ class InvestmentController extends Controller
 
         $riskOptions = ['low' => 'Baixo', 'moderate' => 'Moderado', 'high' => 'Alto', 'variable' => 'Variável'];
 
-        return view('investments.index', compact('categories', 'investments', 'selectedCategory', 'selectedRisk', 'riskOptions'));
+        return view('investments.index', compact('categories', 'investments', 'selectedCategory', 'selectedRisk', 'riskOptions', 'favoriteIds', 'favoritesOnly'));
     }
 
-    public function show(string $slug): View
+    public function show(Request $request, string $slug): View
     {
         $investment = Investment::query()
             ->published()
@@ -51,6 +54,8 @@ class InvestmentController extends Controller
             'points' => $investment->points_of_attention,
         ])->filter(fn ($value) => filled($value))->map(fn ($value) => SafeMarkdown::render($value));
 
-        return view('investments.show', compact('investment', 'markdownSections'));
+        $isFavorite = $request->user()?->favoriteInvestments()->whereKey($investment->id)->exists() ?? false;
+
+        return view('investments.show', compact('investment', 'markdownSections', 'isFavorite'));
     }
 }

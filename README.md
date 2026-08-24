@@ -95,7 +95,7 @@ Os testes automatizados utilizam SQLite apenas em memória e isoladamente. A apl
 
 ## Status
 
-**Invest v0.9 — Fechamento técnico do MVP**
+**Invest v1.0 — Progresso educacional, favoritos e administração de conteúdo**
 
 Disponível nesta versão:
 
@@ -146,6 +146,31 @@ Disponível nesta versão:
 - seeders públicos idempotentes, cobertos por teste de execução dupla;
 - pipeline de integração contínua com PHP 8.2, Node.js 22, PHPUnit, Pint e build do Vite;
 - documentação portátil para deploy em hosts PHP/Laravel compatíveis.
+- progresso educacional privado, com marcação reversível, filtros e resumo acessível no dashboard;
+- favoritos privados de investimentos, com filtro combinável por categoria e risco;
+- painel administrativo protegido para conteúdos, investimentos e fontes;
+- publicação condicionada à associação de ao menos uma fonte oficial;
+- exclusão de fontes vinculadas bloqueada para preservar a integridade editorial;
+- permissões administrativas explícitas, sem criação automática de administrador.
+
+## Administração
+
+Nenhum usuário administrativo é criado por seed, cadastro ou configuração fixa. Após criar uma conta normalmente, promova-a manualmente em um ambiente controlado:
+
+```bash
+php artisan tinker
+```
+
+```php
+$user = App\Models\User::where('email', 'email-do-administrador@example.com')->firstOrFail();
+$user->forceFill(['is_admin' => true])->save();
+```
+
+O campo `is_admin` não é preenchível em massa e não é aceito pelos formulários de cadastro ou perfil. A área `/admin` exige autenticação e autorização administrativa; usuários comuns recebem HTTP 403.
+
+Conteúdos e investimentos em rascunho podem ser salvos sem fontes. Para publicar, o servidor exige pelo menos uma fonte existente. A remoção de uma fonte já vinculada a qualquer conteúdo ou investimento é recusada com uma mensagem clara. Títulos novos geram slugs automaticamente; conflitos recebem sufixos numéricos previsíveis.
+
+Progresso e favoritos pertencem exclusivamente ao usuário autenticado. Progresso representa somente a conclusão de conteúdos publicados; favoritos são itens salvos para consulta posterior e não constituem carteira, recomendação ou acompanhamento de posição.
 
 ## Fluxo principal para demonstração
 
@@ -291,8 +316,7 @@ A classificação de risco apresenta características gerais e não substitui a 
 
 Ainda não implementado:
 
-- painel administrativo e edição de conteúdos;
-- progresso, favoritos, quizzes e recursos personalizados de aprendizagem;
+- quizzes e outros recursos personalizados de aprendizagem;
 - comparador, carteira e acompanhamento de investimentos do usuário;
 - histórico de simulações e histórico detalhado de aportes em metas;
 - orçamento doméstico, receitas, despesas e transações;

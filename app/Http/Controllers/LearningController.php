@@ -16,19 +16,25 @@ class LearningController extends Controller
         $categorySlug = $request->string('categoria')->trim()->toString();
         $selectedCategory = $categories->firstWhere('slug', $categorySlug);
 
+        $completedIds = $request->user()?->contentProgress()->pluck('content_id') ?? collect();
+        $status = $request->user() && in_array($request->string('status')->toString(), ['concluido', 'pendente'], true)
+            ? $request->string('status')->toString() : null;
+
         $contents = Content::query()
             ->published()
             ->with('category')
             ->when($selectedCategory, fn ($query) => $query->whereBelongsTo($selectedCategory))
+            ->when($status === 'concluido', fn ($query) => $query->whereIn('id', $completedIds))
+            ->when($status === 'pendente', fn ($query) => $query->whereNotIn('id', $completedIds))
             ->orderBy('category_id')
             ->orderBy('sort_order')
             ->orderBy('title')
             ->get();
 
-        return view('learn.index', compact('categories', 'contents', 'selectedCategory'));
+        return view('learn.index', compact('categories', 'contents', 'selectedCategory', 'completedIds', 'status'));
     }
 
-    public function show(string $slug): View
+    public function show(Request $request, string $slug): View
     {
         $content = Content::query()
             ->published()
@@ -48,6 +54,8 @@ class LearningController extends Controller
 
         $bodyHtml = SafeMarkdown::render($content->body);
 
-        return view('learn.show', compact('content', 'relatedContents', 'bodyHtml'));
+        $isCompleted = $request->user()?->contentProgress()->where('content_id', $content->id)->exists() ?? false;
+
+        return view('learn.show', compact('content', 'relatedContents', 'bodyHtml', 'isCompleted'));
     }
 }

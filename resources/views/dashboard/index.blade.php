@@ -28,6 +28,10 @@
                     <a href="{{ route('planning.index') }}">Criar uma meta <span aria-hidden="true">→</span></a>
                 @endif
             </div>
+            <div class="row g-3 mb-4">
+                <div class="col-md-8"><div class="dashboard-goals-summary h-100"><p><strong>Progresso educacional: {{ $learningSummary['completed'] }} de {{ $learningSummary['total'] }} conteúdos</strong></p><div class="progress" role="progressbar" aria-label="Progresso educacional" aria-valuenow="{{ $learningSummary['percentage'] }}" aria-valuemin="0" aria-valuemax="100"><div class="progress-bar" style="width: {{ $learningSummary['percentage'] }}%">{{ $learningSummary['percentage'] }}%</div></div><a href="{{ route('learn.index') }}">Continuar aprendendo →</a></div></div>
+                <div class="col-md-4"><div class="dashboard-goals-summary h-100"><p><strong>{{ $favoriteCount }} {{ $favoriteCount === 1 ? 'favorito salvo' : 'favoritos salvos' }}</strong></p><p>Itens para consultar depois, não uma carteira.</p><a href="{{ route('investments.index', ['favoritos' => 1]) }}">Ver favoritos →</a></div></div>
+            </div>
 
             <div class="row g-4">
                 <div class="col-md-6 col-xl-3"><article class="dashboard-card dashboard-card-active h-100"><span class="card-icon" aria-hidden="true">01</span><span class="badge text-bg-light">Disponível</span><h3>Aprenda sobre finanças</h3><p>Construa sua base com conteúdos de educação financeira.</p><a class="dashboard-card-link stretched-link" href="{{ route('learn.index') }}">Explorar conteúdos <span aria-hidden="true">→</span></a></article></div>

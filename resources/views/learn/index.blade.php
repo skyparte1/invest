@@ -17,11 +17,18 @@
             <h2 class="visually-hidden" id="learning-list-title">Conteúdos educacionais</h2>
 
             <nav class="learning-filters" aria-label="Filtrar conteúdos por categoria">
-                <a class="filter-link {{ $selectedCategory ? '' : 'active' }}" href="{{ route('learn.index') }}" @if (! $selectedCategory) aria-current="page" @endif>Todos</a>
+                <a class="filter-link {{ $selectedCategory ? '' : 'active' }}" href="{{ route('learn.index', array_filter(['status' => $status])) }}" @if (! $selectedCategory) aria-current="page" @endif>Todos</a>
                 @foreach ($categories as $category)
-                    <a class="filter-link {{ $selectedCategory?->is($category) ? 'active' : '' }}" href="{{ route('learn.index', ['categoria' => $category->slug]) }}" @if ($selectedCategory?->is($category)) aria-current="page" @endif>{{ $category->name }}</a>
+                    <a class="filter-link {{ $selectedCategory?->is($category) ? 'active' : '' }}" href="{{ route('learn.index', array_filter(['categoria' => $category->slug, 'status' => $status])) }}" @if ($selectedCategory?->is($category)) aria-current="page" @endif>{{ $category->name }}</a>
                 @endforeach
             </nav>
+            @auth
+                <nav class="learning-filters mt-3" aria-label="Filtrar conteúdos por progresso">
+                    <a class="filter-link {{ $status ? '' : 'active' }}" href="{{ route('learn.index', array_filter(['categoria' => $selectedCategory?->slug])) }}">Qualquer progresso</a>
+                    <a class="filter-link {{ $status === 'concluido' ? 'active' : '' }}" href="{{ route('learn.index', array_filter(['categoria' => $selectedCategory?->slug, 'status' => 'concluido'])) }}">Concluídos</a>
+                    <a class="filter-link {{ $status === 'pendente' ? 'active' : '' }}" href="{{ route('learn.index', array_filter(['categoria' => $selectedCategory?->slug, 'status' => 'pendente'])) }}">Pendentes</a>
+                </nav>
+            @endauth
 
             @if ($selectedCategory)
                 <div class="learning-selection">
@@ -38,7 +45,7 @@
             @else
                 <div class="row g-4">
                     @foreach ($contents as $content)
-                        <div class="col-md-6 col-xl-4"><x-content-card :content="$content" /></div>
+                        <div class="col-md-6 col-xl-4"><x-content-card :content="$content" :completed="$completedIds->contains($content->id)" /></div>
                     @endforeach
                 </div>
             @endif

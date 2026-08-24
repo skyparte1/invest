@@ -1,0 +1,18 @@
+@extends('layouts.app')
+@section('title', ($content->exists?'Editar':'Novo').' conteúdo | Administração')
+@section('content')
+<main class="container py-5"><h1>{{ $content->exists?'Editar':'Novo' }} conteúdo</h1><x-admin-nav />
+@if($errors->any())<div class="alert alert-danger" role="alert"><strong>Revise os campos.</strong><ul>@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul></div>@endif
+<form method="POST" action="{{ $content->exists?route('admin.conteudos.update',$content):route('admin.conteudos.store') }}">@csrf @if($content->exists)@method('PUT')@endif
+<div class="row g-3"><div class="col-md-8"><label class="form-label" for="title">Título</label><input class="form-control" id="title" name="title" value="{{ old('title',$content->title) }}" required></div>
+<div class="col-md-4"><label class="form-label" for="category_id">Categoria</label><select class="form-select" id="category_id" name="category_id" required>@foreach($categories as $category)<option value="{{ $category->id }}" @selected(old('category_id',$content->category_id)==$category->id)>{{ $category->name }}</option>@endforeach</select></div>
+@if($content->exists)<div class="col-12"><label class="form-label" for="slug">Slug</label><input class="form-control" id="slug" name="slug" value="{{ old('slug',$content->slug) }}"><small>Deixe em branco para preservar o atual.</small></div>@endif
+<div class="col-12"><label class="form-label" for="summary">Resumo</label><textarea class="form-control" id="summary" name="summary" rows="3" required>{{ old('summary',$content->summary) }}</textarea></div>
+<div class="col-12"><label class="form-label" for="body">Conteúdo (Markdown seguro)</label><textarea class="form-control font-monospace" id="body" name="body" rows="14" required>{{ old('body',$content->body) }}</textarea></div>
+<div class="col-md-4"><label class="form-label" for="difficulty">Dificuldade</label><select class="form-select" id="difficulty" name="difficulty"><option value="beginner" @selected(old('difficulty',$content->difficulty ?: 'beginner')==='beginner')>Iniciante</option></select></div>
+<div class="col-md-4"><label class="form-label" for="estimated_minutes">Minutos</label><input class="form-control" type="number" min="1" id="estimated_minutes" name="estimated_minutes" value="{{ old('estimated_minutes',$content->estimated_minutes) }}"></div>
+<div class="col-md-4"><label class="form-label" for="sort_order">Ordem</label><input class="form-control" type="number" min="0" id="sort_order" name="sort_order" value="{{ old('sort_order',$content->sort_order??0) }}" required></div>
+<div class="col-12"><fieldset><legend class="h5">Fontes</legend>@foreach($sources as $source)<div class="form-check"><input class="form-check-input" type="checkbox" name="sources[]" value="{{ $source->id }}" id="source-{{ $source->id }}" @checked(in_array($source->id,old('sources',$content->exists?$content->sources()->pluck('sources.id')->all():[])))><label class="form-check-label" for="source-{{ $source->id }}">{{ $source->institution }} — {{ $source->title }}</label></div>@endforeach</fieldset></div>
+<div class="col-12"><input type="hidden" name="is_published" value="0"><div class="form-check form-switch"><input class="form-check-input" type="checkbox" id="is_published" name="is_published" value="1" @checked(old('is_published',$content->is_published))><label class="form-check-label" for="is_published">Publicado (exige ao menos uma fonte)</label></div></div></div>
+<div class="mt-4"><button class="btn btn-primary">Salvar</button> <a class="btn btn-link" href="{{ route('admin.conteudos.index') }}">Cancelar</a></div></form></main>
+@endsection

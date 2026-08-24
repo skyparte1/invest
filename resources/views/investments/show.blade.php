@@ -21,6 +21,12 @@
                     <p class="article-summary">{{ $investment->short_description }}</p>
                     <x-risk-badge :investment="$investment" />
                 </header>
+                @auth
+                    <form method="POST" action="{{ $isFavorite ? route('investments.favorite.destroy', $investment) : route('investments.favorite.store', $investment) }}" class="mb-4">
+                        @csrf @method($isFavorite ? 'DELETE' : 'PUT')
+                        <button class="btn {{ $isFavorite ? 'btn-outline-primary' : 'btn-primary' }}" type="submit">{{ $isFavorite ? 'Remover dos favoritos' : 'Salvar nos favoritos' }}</button>
+                    </form>
+                @endauth
 
                 <aside class="risk-explanation" role="note">
                     <strong>Sobre esta classificação</strong>
