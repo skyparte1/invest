@@ -7,7 +7,7 @@
                 <span class="eyebrow">Educação financeira descomplicada</span>
                 <h1>Aprenda a investir com mais consciência.</h1>
                 <p class="hero-lead">Educação financeira, investimentos e ferramentas práticas em um único lugar.</p>
-                <div class="d-flex flex-column flex-sm-row gap-3 mt-4"><a class="btn btn-primary btn-lg" href="#aprender">Começar agora</a><a class="btn btn-outline-primary btn-lg" href="#como-funciona">Conhecer a plataforma</a></div>
+                <div class="d-flex flex-column flex-sm-row gap-3 mt-4"><a class="btn btn-primary btn-lg" href="{{ auth()->check() ? route('dashboard') : route('register') }}">Começar agora</a><a class="btn btn-outline-primary btn-lg" href="#como-funciona">Conhecer a plataforma</a></div>
                 <p class="hero-note">Conhecimento para apoiar suas escolhas, no seu ritmo e sem complicação.</p>
             </div>
             <div class="col-lg-5" aria-hidden="true">
@@ -60,5 +60,5 @@
     </section>
 
     <section class="section pt-0" aria-labelledby="notice-title"><div class="container"><div class="education-notice"><span class="notice-symbol" aria-hidden="true">i</span><div><h2 id="notice-title">Informação para escolhas mais conscientes</h2><p>A Invest é uma plataforma de caráter educacional e informativo. As informações e simulações apresentadas não representam recomendação de investimento ou garantia de rentabilidade.</p></div></div></div></section>
-    <section class="cta-section" id="planejamento" aria-labelledby="cta-title"><div class="container text-center" id="conta"><span class="eyebrow eyebrow-light">Seu próximo passo</span><h2 id="cta-title">Comece sua jornada financeira.</h2><p>Aprenda conceitos, explore investimentos e desenvolva uma relação mais consciente com o seu dinheiro.</p><a class="btn btn-light btn-lg" href="#inicio">Criar conta gratuitamente</a></div></section>
+    <section class="cta-section" id="planejamento" aria-labelledby="cta-title"><div class="container text-center" id="conta"><span class="eyebrow eyebrow-light">Seu próximo passo</span><h2 id="cta-title">Comece sua jornada financeira.</h2><p>Aprenda conceitos, explore investimentos e desenvolva uma relação mais consciente com o seu dinheiro.</p><a class="btn btn-light btn-lg" href="{{ auth()->check() ? route('dashboard') : route('register') }}">Criar conta gratuitamente</a></div></section>
 @endsection

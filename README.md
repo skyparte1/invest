@@ -91,7 +91,7 @@ Os testes automatizados utilizam SQLite apenas em memória e isoladamente. A apl
 
 ## Status
 
-**Invest v0.2 — Fundação Laravel**
+**Invest v0.3 — Autenticação e Dashboard**
 
 Disponível nesta versão:
 
@@ -102,11 +102,15 @@ Disponível nesta versão:
 - assets CSS e JavaScript organizados em `resources`;
 - configuração preparada para MySQL;
 - migrations padrão de usuários, cache e filas;
-- Model `User` padrão, preparado para autenticação futura.
+- Model `User` padrão utilizado pela autenticação;
+- cadastro com validação e normalização de dados;
+- login, opção “Lembrar de mim” e logout seguro;
+- sessão autenticada e dashboard protegido;
+- navbar adaptada para visitantes e usuários autenticados;
+- limitação de tentativas excessivas de login.
 
 Ainda não implementado:
 
-- autenticação e dashboard;
 - módulos educacionais e catálogo funcional de investimentos;
 - simulador e planejamento financeiro;
 - tabelas e regras de negócio específicas da Invest;

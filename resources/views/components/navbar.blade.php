@@ -12,8 +12,16 @@
                     <li class="nav-item"><a class="nav-link" href="{{ url('/#planejamento') }}">Planejamento</a></li>
                 </ul>
                 <div class="nav-actions d-flex flex-column flex-lg-row gap-2">
-                    <a class="btn btn-link" href="{{ url('/#conta') }}">Entrar</a>
-                    <a class="btn btn-primary" href="{{ url('/#conta') }}">Criar conta</a>
+                    @guest
+                        <a class="btn btn-link" href="{{ route('login') }}">Entrar</a>
+                        <a class="btn btn-primary" href="{{ route('register') }}">Criar conta</a>
+                    @else
+                        <a class="btn btn-link" href="{{ route('dashboard') }}">Dashboard</a>
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button class="btn btn-outline-primary w-100" type="submit">Sair</button>
+                        </form>
+                    @endguest
                 </div>
             </div>
         </div>
