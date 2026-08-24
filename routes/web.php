@@ -3,11 +3,15 @@
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\LearningController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('home.index');
 })->name('home');
+
+Route::get('/aprender', [LearningController::class, 'index'])->name('learn.index');
+Route::get('/aprender/{slug}', [LearningController::class, 'show'])->name('learn.show');
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');

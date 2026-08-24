@@ -65,6 +65,14 @@ Não versione o `.env` nem credenciais reais. Com o banco configurado, execute:
 php artisan migrate
 ```
 
+Para recriar o banco local com as categorias, fontes e conteúdos educacionais demonstrativos:
+
+```bash
+php artisan migrate:fresh --seed
+```
+
+Esse comando apaga os dados existentes no banco configurado antes de recriar as tabelas. Use-o somente em um ambiente local descartável.
+
 Para desenvolvimento, mantenha dois terminais abertos:
 
 ```bash
@@ -91,7 +99,7 @@ Os testes automatizados utilizam SQLite apenas em memória e isoladamente. A apl
 
 ## Status
 
-**Invest v0.3 — Autenticação e Dashboard**
+**Invest v0.4 — Módulo Aprender**
 
 Disponível nesta versão:
 
@@ -107,11 +115,23 @@ Disponível nesta versão:
 - login, opção “Lembrar de mim” e logout seguro;
 - sessão autenticada e dashboard protegido;
 - navbar adaptada para visitantes e usuários autenticados;
-- limitação de tentativas excessivas de login.
+- limitação de tentativas excessivas de login;
+- área pública `Aprender`, com filtros por categoria;
+- categorias e conteúdos educacionais determinísticos;
+- páginas individuais com Markdown convertido de forma segura;
+- fontes e referências institucionais associadas a cada conteúdo publicado;
+- conteúdos relacionados da mesma categoria;
+- seeders educacionais para um ambiente demonstrável.
+
+## Política editorial
+
+Todo conteúdo financeiro publicado deve possuir ao menos uma fonte confiável associada. Os conteúdos iniciais foram sintetizados em linguagem própria a partir de materiais oficiais do Banco Central do Brasil e da Comissão de Valores Mobiliários, com registro da data de acesso. A área `Aprender` é pública e possui finalidade exclusivamente educacional e informativa.
 
 Ainda não implementado:
 
-- módulos educacionais e catálogo funcional de investimentos;
+- painel administrativo e edição de conteúdos;
+- progresso, favoritos, quizzes e recursos personalizados de aprendizagem;
+- catálogo funcional de investimentos;
 - simulador e planejamento financeiro;
 - tabelas e regras de negócio específicas da Invest;
 - integrações com dados externos.
