@@ -100,7 +100,7 @@ Os testes automatizados utilizam SQLite apenas em memória e isoladamente. A apl
 
 ## Status
 
-**Invest v0.6 — Simulador Educacional**
+**Invest v0.7 — Planejamento Financeiro**
 
 Disponível nesta versão:
 
@@ -134,6 +134,11 @@ Disponível nesta versão:
 - resumo textual com total investido, saldo e rendimento estimados;
 - gráfico de evolução mensal com total investido e saldo estimado;
 - contexto educacional opcional por modalidade publicada, sem preenchimento automático da taxa.
+- módulo privado de planejamento financeiro por metas;
+- criação, edição e exclusão de metas pertencentes ao usuário autenticado;
+- valor-alvo e valor acumulado persistidos como valores decimais;
+- progresso, valor restante, prazo e valor mensal de referência calculados no servidor;
+- isolamento de metas por usuário com Policy e consultas pelo relacionamento autenticado.
 
 ## Hipóteses do simulador
 
@@ -147,6 +152,12 @@ O valor inicial evolui por `PV(1+i)^n`. Os aportes são considerados ao final de
 
 Os valores apresentados são brutos. A simulação não considera impostos, tarifas, inflação, custos operacionais ou regras específicas de produtos. Não utiliza Selic, CDI, IPCA, cotações, APIs ou qualquer previsão de mercado, e não representa garantia de rentabilidade ou recomendação de investimento.
 
+## Hipóteses do planejamento
+
+O valor mensal de referência divide o valor restante pelo número de meses-calendário disponíveis até a data-alvo, incluindo o mês atual e o mês da meta. Por exemplo, uma data no mês atual corresponde a um mês de referência; uma data no mês seguinte corresponde a dois.
+
+Esse valor é apenas uma referência matemática de organização. O cálculo não considera rentabilidade, inflação, impostos, taxas ou imprevistos e não constitui recomendação financeira. Metas concluídas derivam do valor acumulado, metas vencidas não recebem uma referência mensal futura artificial e somente o proprietário autenticado pode acessar ou alterar seus dados. Na criação, a data-alvo deve ser hoje ou futura; na edição, qualquer data válida é aceita para que uma meta cujo prazo passou continue editável e possa ser reorganizada pelo usuário.
+
 ## Política editorial
 
 Todo conteúdo financeiro publicado deve possuir ao menos uma fonte confiável associada. Os conteúdos iniciais foram sintetizados em linguagem própria a partir de materiais oficiais do Banco Central do Brasil, Comissão de Valores Mobiliários, Tesouro Direto e Fundo Garantidor de Créditos, com registro da data de acesso. As áreas `Aprender` e `Investimentos` são públicas e possuem finalidade exclusivamente educacional e informativa.
@@ -158,6 +169,6 @@ Ainda não implementado:
 - painel administrativo e edição de conteúdos;
 - progresso, favoritos, quizzes e recursos personalizados de aprendizagem;
 - comparador, carteira e acompanhamento de investimentos do usuário;
-- histórico de simulações e planejamento financeiro;
-- tabelas e regras de negócio específicas da Invest;
+- histórico de simulações e histórico detalhado de aportes em metas;
+- orçamento doméstico, receitas, despesas e transações;
 - integrações com dados externos.

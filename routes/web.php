@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\FinancialPlanningController;
 use App\Http\Controllers\InvestmentController;
 use App\Http\Controllers\LearningController;
 use App\Http\Controllers\SimulationController;
@@ -31,5 +32,10 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
+    Route::get('/planejamento', [FinancialPlanningController::class, 'index'])->name('planning.index');
+    Route::post('/planejamento', [FinancialPlanningController::class, 'store'])->name('planning.store');
+    Route::get('/planejamento/{financialGoal}/editar', [FinancialPlanningController::class, 'edit'])->name('planning.edit');
+    Route::match(['put', 'patch'], '/planejamento/{financialGoal}', [FinancialPlanningController::class, 'update'])->name('planning.update');
+    Route::delete('/planejamento/{financialGoal}', [FinancialPlanningController::class, 'destroy'])->name('planning.destroy');
     Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 });

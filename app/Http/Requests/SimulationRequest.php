@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Support\DecimalNormalizer;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -17,9 +18,9 @@ class SimulationRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         $this->merge([
-            'initial_amount' => $this->normalizeDecimal($this->input('initial_amount')),
-            'periodic_contribution' => $this->normalizeDecimal($this->input('periodic_contribution')),
-            'annual_rate' => $this->normalizeDecimal($this->input('annual_rate')),
+            'initial_amount' => DecimalNormalizer::normalize($this->input('initial_amount')),
+            'periodic_contribution' => DecimalNormalizer::normalize($this->input('periodic_contribution')),
+            'annual_rate' => DecimalNormalizer::normalize($this->input('annual_rate')),
         ]);
     }
 
@@ -81,31 +82,5 @@ class SimulationRequest extends FormRequest
             'contribution_frequency.in' => 'Nesta versão, a frequência disponível é mensal.',
             'investment_slug.exists' => 'Selecione uma modalidade publicada válida.',
         ];
-    }
-
-    private function normalizeDecimal(mixed $value): mixed
-    {
-        if (! is_string($value)) {
-            return $value;
-        }
-
-        $normalized = str_replace(['R$', ' ', "\u{00A0}"], '', trim($value));
-
-        if (! preg_match('/^-?[0-9.,]+$/', $normalized)) {
-            return $value;
-        }
-
-        $lastComma = strrpos($normalized, ',');
-        $lastDot = strrpos($normalized, '.');
-
-        if ($lastComma === false && $lastDot === false) {
-            return $normalized;
-        }
-
-        $decimalPosition = max($lastComma === false ? -1 : $lastComma, $lastDot === false ? -1 : $lastDot);
-        $integer = preg_replace('/[.,]/', '', substr($normalized, 0, $decimalPosition));
-        $fraction = preg_replace('/[.,]/', '', substr($normalized, $decimalPosition + 1));
-
-        return $fraction === '' ? $integer : $integer.'.'.$fraction;
     }
 }

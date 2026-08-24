@@ -19,13 +19,18 @@ class DashboardTest extends TestCase
     {
         $user = User::factory()->create(['name' => 'Ana Souza']);
 
-        $this->actingAs($user)
-            ->get('/dashboard')
+        $response = $this->actingAs($user)
+            ->get('/dashboard');
+
+        $response
             ->assertOk()
             ->assertSee('Olá, Ana.')
             ->assertSee('Continue sua jornada financeira.')
-            ->assertSee('Em breve')
+            ->assertDontSee('Em breve')
+            ->assertSee('Planejar objetivos')
             ->assertSee('Dashboard')
             ->assertSee('Sair');
+
+        $this->assertSame(4, substr_count($response->getContent(), 'Disponível'));
     }
 }

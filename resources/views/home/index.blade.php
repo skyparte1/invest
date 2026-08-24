@@ -27,7 +27,7 @@
                 <div class="col-sm-6 col-lg-3"><article class="benefit-card h-100"><span class="card-icon" aria-hidden="true">01</span><h3>Aprenda</h3><p>Conteúdos de educação financeira desenvolvidos para iniciantes.</p></article></div>
                 <div class="col-sm-6 col-lg-3"><article class="benefit-card h-100"><span class="card-icon" aria-hidden="true">02</span><h3>Conheça</h3><p>Entenda diferentes modalidades de investimento, riscos e características.</p></article></div>
                 <div class="col-sm-6 col-lg-3"><article class="benefit-card h-100"><span class="card-icon" aria-hidden="true">03</span><h3><a href="{{ route('simulator.index') }}">Simule</a></h3><p>Visualize cenários hipotéticos de investimento por meio de ferramentas interativas.</p></article></div>
-                <div class="col-sm-6 col-lg-3"><article class="benefit-card h-100"><span class="card-icon" aria-hidden="true">04</span><h3>Planeje</h3><p>Organize sua vida financeira e estabeleça objetivos.</p></article></div>
+                <div class="col-sm-6 col-lg-3"><article class="benefit-card h-100"><span class="card-icon" aria-hidden="true">04</span><h3><a href="{{ route('planning.index') }}">Planeje</a></h3><p>Organize sua vida financeira e estabeleça objetivos.</p></article></div>
             </div>
         </div>
     </section>
@@ -39,7 +39,7 @@
                 <li class="col-md-6 col-lg-3"><div class="journey-step"><span>1</span><div><h3>Aprenda</h3><p>Comece pelos conceitos essenciais.</p></div></div></li>
                 <li class="col-md-6 col-lg-3"><div class="journey-step"><span>2</span><div><h3>Conheça</h3><p>Explore opções e características.</p></div></div></li>
                 <li class="col-md-6 col-lg-3"><div class="journey-step"><span>3</span><div><h3><a href="{{ route('simulator.index') }}">Simule</a></h3><p>Observe cenários hipotéticos.</p></div></div></li>
-                <li class="col-md-6 col-lg-3"><div class="journey-step"><span>4</span><div><h3>Planeje</h3><p>Transforme conhecimento em objetivos.</p></div></div></li>
+                <li class="col-md-6 col-lg-3"><div class="journey-step"><span>4</span><div><h3><a href="{{ route('planning.index') }}">Planeje</a></h3><p>Transforme conhecimento em objetivos.</p></div></div></li>
             </ol>
         </div>
     </section>
