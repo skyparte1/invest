@@ -14,6 +14,8 @@ Route::get('/', function () {
     return view('home.index');
 })->name('home');
 
+Route::get('/health', fn () => response()->json(['status' => 'ok']))->name('health');
+
 Route::get('/aprender', [LearningController::class, 'index'])->name('learn.index');
 Route::get('/aprender/{slug}', [LearningController::class, 'show'])->name('learn.show');
 

@@ -62,6 +62,24 @@ class RegistrationTest extends TestCase
         $this->assertGuest();
     }
 
+    public function test_mismatched_confirmation_has_accessible_invalid_state(): void
+    {
+        $this->from(route('register'))->post(route('register.store'), [
+            'name' => 'Ana Souza',
+            'email' => 'ana@example.com',
+            'password' => 'senha-segura',
+            'password_confirmation' => 'senha-diferente',
+        ]);
+
+        $response = $this->get(route('register'));
+
+        $response->assertOk()->assertSee('aria-invalid="true" aria-describedby="password-error"', false);
+        $this->assertMatchesRegularExpression(
+            '/class="form-control\s+is-invalid\s*" id="password_confirmation"/',
+            $response->getContent(),
+        );
+    }
+
     public function test_registration_rejects_invalid_email_short_password_and_mismatched_confirmation(): void
     {
         $this->from('/register')->post('/register', [

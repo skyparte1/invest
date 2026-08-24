@@ -13,7 +13,7 @@
                     <p>Cadastre-se para acessar sua área educacional.</p>
                 </div>
 
-                <form method="POST" action="{{ route('register.store') }}" novalidate>
+                <form method="POST" action="{{ route('register.store') }}" data-disable-on-submit novalidate>
                     @csrf
 
                     <div class="mb-3">
@@ -37,7 +37,7 @@
 
                     <div class="mb-4">
                         <label class="form-label" for="password_confirmation">Confirmar senha</label>
-                        <input class="form-control" id="password_confirmation" name="password_confirmation" type="password" minlength="8" autocomplete="new-password" required>
+                        <input class="form-control @error('password') is-invalid @enderror" id="password_confirmation" name="password_confirmation" type="password" minlength="8" autocomplete="new-password" required @error('password') aria-invalid="true" aria-describedby="password-error" @enderror>
                     </div>
 
                     <button class="btn btn-primary btn-lg w-100" type="submit">Criar conta</button>

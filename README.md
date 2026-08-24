@@ -60,19 +60,14 @@ DB_USERNAME=
 DB_PASSWORD=
 ```
 
-Não versione o `.env` nem credenciais reais. Com o banco configurado, execute:
+Não versione o `.env` nem credenciais reais. Com o banco configurado, crie as tabelas e carregue o conteúdo público inicial:
 
 ```bash
 php artisan migrate
+php artisan db:seed
 ```
 
-Para recriar o banco local com as categorias, fontes e conteúdos educacionais demonstrativos:
-
-```bash
-php artisan migrate:fresh --seed
-```
-
-Esse comando apaga os dados existentes no banco configurado antes de recriar as tabelas. Use-o somente em um ambiente local descartável.
+`php artisan db:seed` pode ser executado novamente com segurança: os seeders atualizam categorias, conteúdos, fontes, investimentos e relacionamentos existentes sem duplicá-los. Eles não criam usuários.
 
 Para desenvolvimento, mantenha dois terminais abertos:
 
@@ -100,7 +95,7 @@ Os testes automatizados utilizam SQLite apenas em memória e isoladamente. A apl
 
 ## Status
 
-**Invest v0.8 — Consolidação do MVP**
+**Invest v0.9 — Fechamento técnico do MVP**
 
 Disponível nesta versão:
 
@@ -146,6 +141,11 @@ Disponível nesta versão:
 - navegação adaptada a visitantes e usuários autenticados, com indicação acessível da página atual;
 - mensagens de sucesso padronizadas e páginas próprias para erros 403 e 404;
 - landing page conectada a todos os módulos disponíveis no MVP.
+- health check público e mínimo em `/health`;
+- headers HTTP de segurança compatíveis com os recursos atuais;
+- seeders públicos idempotentes, cobertos por teste de execução dupla;
+- pipeline de integração contínua com PHP 8.2, Node.js 22, PHPUnit, Pint e build do Vite;
+- documentação portátil para deploy em hosts PHP/Laravel compatíveis.
 
 ## Fluxo principal para demonstração
 
@@ -167,24 +167,103 @@ Disponível nesta versão:
 - nome e e-mail são normalizados e validados; o e-mail permanece único;
 - o `.env` e credenciais reais não são versionados.
 
-## Preparação para produção
+## Deploy em produção
 
-Configure o servidor com `APP_ENV=production`, `APP_DEBUG=false`, `APP_URL` apontando para a URL HTTPS real e credenciais exclusivas de produção. Gere uma chave própria com `php artisan key:generate`, execute as migrations e gere os assets antes de disponibilizar a aplicação.
+Este fluxo é portátil entre Render, Railway, VPS Linux e outros hosts compatíveis com PHP e Laravel. Ajuste apenas os mecanismos próprios de cada infraestrutura.
 
-Após instalar as dependências e configurar o ambiente, os comandos de otimização são:
+1. Clone o repositório e instale as dependências PHP sem pacotes de desenvolvimento:
 
 ```bash
+composer install --no-dev --optimize-autoloader
+```
+
+2. Crie o `.env` a partir do exemplo e configure valores próprios de produção:
+
+```dotenv
+APP_ENV=production
+APP_DEBUG=false
+APP_URL=https://dominio-real
+LOG_LEVEL=warning
+
+DB_CONNECTION=mysql
+DB_HOST=
+DB_PORT=3306
+DB_DATABASE=
+DB_USERNAME=
+DB_PASSWORD=
+
+SESSION_SECURE_COOKIE=true
+```
+
+Produção utiliza MySQL ou MariaDB. SQLite em memória é utilizado somente pela suíte automatizada de testes. Não versione o `.env`, a `APP_KEY` ou credenciais reais.
+
+3. Gere uma chave exclusiva no ambiente de produção:
+
+```bash
+php artisan key:generate
+```
+
+4. Instale exatamente as dependências registradas no lockfile e gere os assets estáticos:
+
+```bash
+npm ci
 npm run build
+```
+
+Produção utiliza somente os arquivos compilados. `npm run dev` é exclusivo do desenvolvimento.
+
+5. Execute migrations sem interação e carregue o conteúdo público inicial:
+
+```bash
+php artisan migrate --force
+php artisan db:seed --force
+```
+
+`db:seed` popula categorias, conteúdos, fontes, categorias de investimento, investimentos e seus relacionamentos. Os seeders são idempotentes e não criam usuário administrativo ou conta de demonstração. Nunca execute `migrate:fresh` em produção: esse comando apaga as tabelas e os dados existentes.
+
+6. Gere os caches de produção:
+
+```bash
 php artisan optimize
 ```
 
-Em cada nova versão implantada, execute os testes antes da publicação. Se precisar remover os caches durante diagnóstico ou desenvolvimento, utilize:
+O document root do Apache, Nginx ou painel da hospedagem deve apontar para a pasta `public/`, nunca para a raiz do repositório. O servidor precisa encaminhar as rotas não encontradas para `public/index.php` e usar uma versão compatível do PHP.
+
+As pastas `storage/` e `bootstrap/cache/` precisam ser graváveis pelo usuário do processo PHP. Aplique proprietário e permissões adequados à sua infraestrutura; não utilize `chmod 777`.
+
+HTTPS deve ser habilitado na infraestrutura. Com HTTPS, mantenha `SESSION_SECURE_COOKIE=true` para que o cookie de sessão não seja enviado em conexões inseguras. `SESSION_DRIVER=file` atende uma única instância; em múltiplas instâncias, planeje uma sessão centralizada antes de escalar. Redis não é requisito deste MVP e a fila permanece síncrona.
+
+Para limpar caches durante diagnóstico ou antes de recriá-los:
 
 ```bash
 php artisan optimize:clear
 ```
 
-Nunca publique o arquivo `.env`, nunca reutilize credenciais locais e mantenha `APP_DEBUG=false` fora do ambiente de desenvolvimento.
+O endpoint `GET /health` retorna apenas `{"status":"ok"}`, não consulta o banco e não revela versões, ambiente ou infraestrutura.
+
+### Checklist de produção
+
+- [ ] `APP_ENV=production`
+- [ ] `APP_DEBUG=false`
+- [ ] `APP_KEY` própria e secreta
+- [ ] `APP_URL` com HTTPS
+- [ ] banco MySQL/MariaDB de produção configurado
+- [ ] `SESSION_SECURE_COOKIE=true` em HTTPS
+- [ ] migrations executadas com `--force`
+- [ ] seed público executado quando necessário
+- [ ] `npm run build` concluído
+- [ ] `php artisan optimize` concluído
+- [ ] document root apontando para `public/`
+- [ ] permissões de `storage/` e `bootstrap/cache/` configuradas
+- [ ] testes aprovados
+- [ ] CI verde
+- [ ] backup configurado pela infraestrutura
+
+Antes de migrations futuras potencialmente destrutivas, produza e valide um backup do banco. A aplicação não implementa backup automático; essa responsabilidade pertence à infraestrutura.
+
+## Integração contínua
+
+O workflow [`.github/workflows/ci.yml`](.github/workflows/ci.yml) é executado em pushes e pull requests para `main`. Ele valida o `composer.json`, instala as dependências, gera uma chave temporária, verifica o estilo com Pint, executa os testes em SQLite na memória, instala o front-end com `npm ci` e compila os assets com Vite. O pipeline não realiza deploy.
 
 ## Hipóteses do simulador
 

@@ -19,6 +19,7 @@ a { text-underline-offset: .2em; }
 .nav-link { margin: 0 .25rem; color: #3f4b62; font-size: .94rem; font-weight: 500; }
 .nav-link:hover, .nav-link:focus { color: var(--primary); }
 .nav-actions .btn-link { color: var(--ink); font-weight: 600; text-decoration: none; }
+.nav-link[aria-current="page"], .nav-actions a[aria-current="page"] { color: var(--primary); font-weight: 700; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: .45rem; }
 .btn { border-radius: 10px; font-weight: 600; }
 .btn-primary { background: var(--primary); border-color: var(--primary); box-shadow: 0 8px 18px rgba(24,87,201,.18); }
 .btn-primary:hover, .btn-primary:focus { background: var(--primary-dark); border-color: var(--primary-dark); }

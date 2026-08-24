@@ -89,6 +89,25 @@ class ProfileTest extends TestCase
         $this->assertTrue(Hash::check('senha-atual', $user->fresh()->password));
     }
 
+    public function test_profile_confirmation_has_accessible_invalid_state(): void
+    {
+        $user = User::factory()->create(['password' => 'senha-atual']);
+
+        $this->actingAs($user)->put(route('profile.password.update'), [
+            'current_password' => 'senha-atual',
+            'password' => 'senha-nova',
+            'password_confirmation' => 'outra-senha',
+        ]);
+
+        $response = $this->actingAs($user)->get(route('profile.edit'));
+
+        $response->assertOk()->assertSee('aria-invalid="true" aria-describedby="password-error"', false);
+        $this->assertMatchesRegularExpression(
+            '/class="form-control\s+is-invalid\s*" id="password_confirmation"/',
+            $response->getContent(),
+        );
+    }
+
     public function test_user_updates_password_and_remains_authenticated(): void
     {
         $user = User::factory()->create(['password' => 'senha-atual']);

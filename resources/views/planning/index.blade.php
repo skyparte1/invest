@@ -32,7 +32,7 @@
                     <h2 id="create-goal-title">Criar uma meta</h2>
                     <p>Preencha os dados que você deseja usar para sua organização.</p>
 
-                    <form method="POST" action="{{ route('planning.store') }}" novalidate>
+                    <form method="POST" action="{{ route('planning.store') }}" data-disable-on-submit novalidate>
                         @csrf
                         @include('planning.partials.form-fields')
                         <button class="btn btn-primary btn-lg w-100 mt-4" type="submit">Criar meta</button>

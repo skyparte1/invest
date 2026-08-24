@@ -61,7 +61,7 @@
 
                     <div class="mb-4">
                         <label class="form-label" for="password_confirmation">Confirmar nova senha</label>
-                        <input class="form-control" id="password_confirmation" name="password_confirmation" type="password" minlength="8" autocomplete="new-password" required>
+                        <input class="form-control @error('password', 'updatePassword') is-invalid @enderror" id="password_confirmation" name="password_confirmation" type="password" minlength="8" autocomplete="new-password" required @error('password', 'updatePassword') aria-invalid="true" aria-describedby="password-error" @enderror>
                     </div>
 
                     <button class="btn btn-primary" type="submit">Atualizar senha</button>
@@ -72,7 +72,7 @@
                 <h2 id="profile-delete-title">Excluir conta</h2>
                 <p>Esta ação é permanente e também excluirá todas as suas metas financeiras. Os conteúdos educacionais públicos permanecem na plataforma.</p>
 
-                <form method="POST" action="{{ route('profile.destroy') }}" onsubmit="return confirm('Excluir sua conta permanentemente? Esta ação não pode ser desfeita.')" novalidate>
+                <form method="POST" action="{{ route('profile.destroy') }}" data-disable-on-submit onsubmit="return confirm('Excluir sua conta permanentemente? Esta ação não pode ser desfeita.')" novalidate>
                     @csrf
                     @method('DELETE')
 
