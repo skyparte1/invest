@@ -9,3 +9,9 @@ document.querySelectorAll('#mainNav .nav-link, #mainNav .nav-actions a').forEach
         }
     });
 });
+
+const simulationChartData = document.getElementById('simulation-chart-data');
+
+if (simulationChartData) {
+    import('./simulator').then(({ renderSimulationChart }) => renderSimulationChart(simulationChartData));
+}

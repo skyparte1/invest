@@ -38,6 +38,11 @@
                     @if ($markdownSections->has('points'))<section class="investment-section attention-section" aria-labelledby="attention-title"><h2 id="attention-title">Pontos de atenção</h2>{!! $markdownSections['points'] !!}</section>@endif
                 </div>
 
+                <aside class="simulation-invitation" aria-labelledby="simulation-invitation-title">
+                    <div><strong id="simulation-invitation-title">Explore um cenário matemático</strong><p>Use esta modalidade apenas como contexto, definindo você mesmo uma taxa hipotética.</p></div>
+                    <a class="btn btn-outline-primary" href="{{ route('simulator.index', ['investimento' => $investment->slug]) }}">Simular cenário hipotético</a>
+                </aside>
+
                 <aside class="article-notice" role="note"><span class="notice-symbol" aria-hidden="true">i</span><p>Conteúdo educacional e informativo. Não constitui recomendação, análise de perfil ou orientação fiscal individual.</p></aside>
 
                 <section class="article-sources" aria-labelledby="sources-title">

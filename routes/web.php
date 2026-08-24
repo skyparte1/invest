@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InvestmentController;
 use App\Http\Controllers\LearningController;
+use App\Http\Controllers\SimulationController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -16,6 +17,9 @@ Route::get('/aprender/{slug}', [LearningController::class, 'show'])->name('learn
 
 Route::get('/investimentos', [InvestmentController::class, 'index'])->name('investments.index');
 Route::get('/investimentos/{slug}', [InvestmentController::class, 'show'])->name('investments.show');
+
+Route::get('/simulador', [SimulationController::class, 'index'])->name('simulator.index');
+Route::post('/simulador', [SimulationController::class, 'calculate'])->name('simulator.calculate');
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');

@@ -8,6 +8,7 @@ A Invest é uma plataforma web de educação financeira voltada principalmente a
 - Laravel Framework 12.67.0
 - MySQL; o ambiente local possui MariaDB 10.4.32 do XAMPP, compatível com o protocolo MySQL
 - Bootstrap 5.3.8
+- Chart.js 4.5.1
 - JavaScript ES6+
 - Vite 7.3.6
 - Node.js 22.16.0 e npm 10.9.2
@@ -99,7 +100,7 @@ Os testes automatizados utilizam SQLite apenas em memória e isoladamente. A apl
 
 ## Status
 
-**Invest v0.5 — Catálogo de Investimentos**
+**Invest v0.6 — Simulador Educacional**
 
 Disponível nesta versão:
 
@@ -128,6 +129,23 @@ Disponível nesta versão:
 - classificação didática de risco sempre acompanhada de texto explicativo;
 - fontes oficiais associadas pelo relacionamento `investment ↔ source`;
 - integração do catálogo com landing page, navbar, footer e dashboard.
+- simulador público de crescimento de capital com parâmetros definidos pelo usuário;
+- cálculo de juros compostos e aportes mensais ao final de cada período;
+- resumo textual com total investido, saldo e rendimento estimados;
+- gráfico de evolução mensal com total investido e saldo estimado;
+- contexto educacional opcional por modalidade publicada, sem preenchimento automático da taxa.
+
+## Hipóteses do simulador
+
+O simulador aplica somente matemática financeira aos parâmetros informados pelo usuário. A taxa anual hipotética `r` é convertida para a taxa mensal equivalente:
+
+```text
+i = (1 + r)^(1/12) - 1
+```
+
+O valor inicial evolui por `PV(1+i)^n`. Os aportes são considerados ao final de cada mês e, quando `i` é diferente de zero, evoluem por `PMT × [((1+i)^n - 1) / i]`. Na taxa zero, os aportes são simplesmente multiplicados pelo número de meses.
+
+Os valores apresentados são brutos. A simulação não considera impostos, tarifas, inflação, custos operacionais ou regras específicas de produtos. Não utiliza Selic, CDI, IPCA, cotações, APIs ou qualquer previsão de mercado, e não representa garantia de rentabilidade ou recomendação de investimento.
 
 ## Política editorial
 
@@ -140,6 +158,6 @@ Ainda não implementado:
 - painel administrativo e edição de conteúdos;
 - progresso, favoritos, quizzes e recursos personalizados de aprendizagem;
 - comparador, carteira e acompanhamento de investimentos do usuário;
-- simulador e planejamento financeiro;
+- histórico de simulações e planejamento financeiro;
 - tabelas e regras de negócio específicas da Invest;
 - integrações com dados externos.
