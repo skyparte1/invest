@@ -33,4 +33,21 @@ class DashboardTest extends TestCase
 
         $this->assertSame(4, substr_count($response->getContent(), 'Disponível'));
     }
+
+    public function test_dashboard_summarizes_active_goals(): void
+    {
+        $user = User::factory()->create();
+        $user->financialGoals()->create([
+            'name' => 'Reserva',
+            'target_amount' => 1000,
+            'current_amount' => 100,
+            'target_date' => now()->addMonth(),
+        ]);
+
+        $this->actingAs($user)->get(route('dashboard'))
+            ->assertOk()
+            ->assertSee('Você possui')
+            ->assertSee('1 meta ativa')
+            ->assertSee('Acompanhar planejamento');
+    }
 }

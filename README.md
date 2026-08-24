@@ -100,7 +100,7 @@ Os testes automatizados utilizam SQLite apenas em memória e isoladamente. A apl
 
 ## Status
 
-**Invest v0.7 — Planejamento Financeiro**
+**Invest v0.8 — Consolidação do MVP**
 
 Disponível nesta versão:
 
@@ -139,6 +139,52 @@ Disponível nesta versão:
 - valor-alvo e valor acumulado persistidos como valores decimais;
 - progresso, valor restante, prazo e valor mensal de referência calculados no servidor;
 - isolamento de metas por usuário com Policy e consultas pelo relacionamento autenticado.
+- perfil privado para atualização normalizada de nome e e-mail;
+- troca de senha protegida pela confirmação da senha atual;
+- exclusão permanente da conta, com encerramento da sessão e remoção em cascata das metas pessoais;
+- dashboard consolidado com acesso aos quatro módulos e resumo das metas ativas;
+- navegação adaptada a visitantes e usuários autenticados, com indicação acessível da página atual;
+- mensagens de sucesso padronizadas e páginas próprias para erros 403 e 404;
+- landing page conectada a todos os módulos disponíveis no MVP.
+
+## Fluxo principal para demonstração
+
+1. Acesse a landing page e explore os módulos públicos **Aprender**, **Investimentos** e **Simulador**.
+2. Crie uma conta ou entre com um usuário existente.
+3. No dashboard, acesse **Planejamento** e cadastre uma meta.
+4. Retorne ao dashboard para visualizar o resumo de metas ativas.
+5. Abra **Perfil** para atualizar nome, e-mail ou senha.
+6. Termine a sessão pelo botão **Sair**.
+
+## Segurança e privacidade
+
+- todas as rotas de dashboard, perfil e planejamento exigem autenticação;
+- alterações sensíveis utilizam métodos HTTP apropriados e proteção CSRF do Laravel;
+- a senha atual é obrigatória para troca de senha e exclusão da conta;
+- senhas são armazenadas apenas com o hash gerenciado pelo Laravel;
+- metas são consultadas pelo relacionamento do usuário e protegidas por Policy contra acesso indevido;
+- a exclusão da conta invalida a sessão, renova o token CSRF e remove somente os dados pessoais associados;
+- nome e e-mail são normalizados e validados; o e-mail permanece único;
+- o `.env` e credenciais reais não são versionados.
+
+## Preparação para produção
+
+Configure o servidor com `APP_ENV=production`, `APP_DEBUG=false`, `APP_URL` apontando para a URL HTTPS real e credenciais exclusivas de produção. Gere uma chave própria com `php artisan key:generate`, execute as migrations e gere os assets antes de disponibilizar a aplicação.
+
+Após instalar as dependências e configurar o ambiente, os comandos de otimização são:
+
+```bash
+npm run build
+php artisan optimize
+```
+
+Em cada nova versão implantada, execute os testes antes da publicação. Se precisar remover os caches durante diagnóstico ou desenvolvimento, utilize:
+
+```bash
+php artisan optimize:clear
+```
+
+Nunca publique o arquivo `.env`, nunca reutilize credenciais locais e mantenha `APP_DEBUG=false` fora do ambiente de desenvolvimento.
 
 ## Hipóteses do simulador
 

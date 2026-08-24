@@ -15,8 +15,18 @@
     <section class="dashboard-content" aria-labelledby="dashboard-resources-title">
         <div class="container">
             <div class="section-heading mb-4">
-                <h2 id="dashboard-resources-title">Explore o que vem por aí</h2>
-                <p>Novos recursos serão disponibilizados progressivamente.</p>
+                <h2 id="dashboard-resources-title">Continue sua jornada</h2>
+                <p>Todos os recursos do MVP estão disponíveis para você explorar.</p>
+            </div>
+
+            <div class="dashboard-goals-summary" role="status">
+                @if ($goalSummary['active'] > 0)
+                    <p>Você possui <strong>{{ $goalSummary['active'] }} {{ $goalSummary['active'] === 1 ? 'meta ativa' : 'metas ativas' }}</strong>.</p>
+                    <a href="{{ route('planning.index') }}">Acompanhar planejamento <span aria-hidden="true">→</span></a>
+                @else
+                    <p>Você ainda não possui metas ativas.</p>
+                    <a href="{{ route('planning.index') }}">Criar uma meta <span aria-hidden="true">→</span></a>
+                @endif
             </div>
 
             <div class="row g-4">

@@ -24,8 +24,8 @@
         <div class="container">
             <div class="section-heading text-center"><span class="eyebrow">Tudo em um só lugar</span><h2 id="beneficios-title">Construa uma base financeira mais sólida</h2><p>Do primeiro conceito ao planejamento dos seus objetivos, a Invest acompanha cada etapa do aprendizado.</p></div>
             <div class="row g-4">
-                <div class="col-sm-6 col-lg-3"><article class="benefit-card h-100"><span class="card-icon" aria-hidden="true">01</span><h3>Aprenda</h3><p>Conteúdos de educação financeira desenvolvidos para iniciantes.</p></article></div>
-                <div class="col-sm-6 col-lg-3"><article class="benefit-card h-100"><span class="card-icon" aria-hidden="true">02</span><h3>Conheça</h3><p>Entenda diferentes modalidades de investimento, riscos e características.</p></article></div>
+                <div class="col-sm-6 col-lg-3"><article class="benefit-card h-100"><span class="card-icon" aria-hidden="true">01</span><h3><a href="{{ route('learn.index') }}">Aprenda</a></h3><p>Conteúdos de educação financeira desenvolvidos para iniciantes.</p></article></div>
+                <div class="col-sm-6 col-lg-3"><article class="benefit-card h-100"><span class="card-icon" aria-hidden="true">02</span><h3><a href="{{ route('investments.index') }}">Conheça</a></h3><p>Entenda diferentes modalidades de investimento, riscos e características.</p></article></div>
                 <div class="col-sm-6 col-lg-3"><article class="benefit-card h-100"><span class="card-icon" aria-hidden="true">03</span><h3><a href="{{ route('simulator.index') }}">Simule</a></h3><p>Visualize cenários hipotéticos de investimento por meio de ferramentas interativas.</p></article></div>
                 <div class="col-sm-6 col-lg-3"><article class="benefit-card h-100"><span class="card-icon" aria-hidden="true">04</span><h3><a href="{{ route('planning.index') }}">Planeje</a></h3><p>Organize sua vida financeira e estabeleça objetivos.</p></article></div>
             </div>
@@ -36,8 +36,8 @@
         <div class="container">
             <div class="section-heading"><span class="eyebrow">Como funciona</span><h2 id="steps-title">Uma jornada simples, feita para você avançar</h2></div>
             <ol class="journey row g-4 list-unstyled">
-                <li class="col-md-6 col-lg-3"><div class="journey-step"><span>1</span><div><h3>Aprenda</h3><p>Comece pelos conceitos essenciais.</p></div></div></li>
-                <li class="col-md-6 col-lg-3"><div class="journey-step"><span>2</span><div><h3>Conheça</h3><p>Explore opções e características.</p></div></div></li>
+                <li class="col-md-6 col-lg-3"><div class="journey-step"><span>1</span><div><h3><a href="{{ route('learn.index') }}">Aprenda</a></h3><p>Comece pelos conceitos essenciais.</p></div></div></li>
+                <li class="col-md-6 col-lg-3"><div class="journey-step"><span>2</span><div><h3><a href="{{ route('investments.index') }}">Conheça</a></h3><p>Explore opções e características.</p></div></div></li>
                 <li class="col-md-6 col-lg-3"><div class="journey-step"><span>3</span><div><h3><a href="{{ route('simulator.index') }}">Simule</a></h3><p>Observe cenários hipotéticos.</p></div></div></li>
                 <li class="col-md-6 col-lg-3"><div class="journey-step"><span>4</span><div><h3><a href="{{ route('planning.index') }}">Planeje</a></h3><p>Transforme conhecimento em objetivos.</p></div></div></li>
             </ol>
@@ -59,5 +59,5 @@
     </section>
 
     <section class="section pt-0" aria-labelledby="notice-title"><div class="container"><div class="education-notice"><span class="notice-symbol" aria-hidden="true">i</span><div><h2 id="notice-title">Informação para escolhas mais conscientes</h2><p>A Invest é uma plataforma de caráter educacional e informativo. As informações e simulações apresentadas não representam recomendação de investimento ou garantia de rentabilidade.</p></div></div></div></section>
-    <section class="cta-section" id="planejamento" aria-labelledby="cta-title"><div class="container text-center" id="conta"><span class="eyebrow eyebrow-light">Seu próximo passo</span><h2 id="cta-title">Comece sua jornada financeira.</h2><p>Aprenda conceitos, explore investimentos e desenvolva uma relação mais consciente com o seu dinheiro.</p><a class="btn btn-light btn-lg" href="{{ auth()->check() ? route('dashboard') : route('register') }}">Criar conta gratuitamente</a></div></section>
+    <section class="cta-section" id="planejamento" aria-labelledby="cta-title"><div class="container text-center" id="conta"><span class="eyebrow eyebrow-light">Seu próximo passo</span><h2 id="cta-title">Comece sua jornada financeira.</h2><p>Aprenda conceitos, explore investimentos e desenvolva uma relação mais consciente com o seu dinheiro.</p><a class="btn btn-light btn-lg" href="{{ auth()->check() ? route('dashboard') : route('register') }}">{{ auth()->check() ? 'Ir para o dashboard' : 'Criar conta gratuitamente' }}</a></div></section>
 @endsection

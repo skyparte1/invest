@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FinancialPlanningController;
 use App\Http\Controllers\InvestmentController;
 use App\Http\Controllers\LearningController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SimulationController;
 use Illuminate\Support\Facades\Route;
 
@@ -32,6 +33,10 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
+    Route::get('/perfil', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/perfil', [ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/perfil/senha', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
+    Route::delete('/perfil', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/planejamento', [FinancialPlanningController::class, 'index'])->name('planning.index');
     Route::post('/planejamento', [FinancialPlanningController::class, 'store'])->name('planning.store');
     Route::get('/planejamento/{financialGoal}/editar', [FinancialPlanningController::class, 'edit'])->name('planning.edit');

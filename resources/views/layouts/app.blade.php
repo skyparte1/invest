@@ -15,6 +15,7 @@
     <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
     <x-navbar />
     <main id="conteudo">
+        <x-flash-message />
         @yield('content')
     </main>
     <x-footer />

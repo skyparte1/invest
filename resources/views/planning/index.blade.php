@@ -14,10 +14,6 @@
 
     <section class="planning-section" aria-label="Metas financeiras">
         <div class="container">
-            @if (session('status'))
-                <div class="alert alert-success planning-feedback" role="status">{{ session('status') }}</div>
-            @endif
-
             <aside class="planning-disclaimer" role="note">
                 <span class="notice-symbol" aria-hidden="true">i</span>
                 <p>O planejamento apresentado possui finalidade educacional e organizacional. Os valores de referência são cálculos matemáticos baseados nos dados informados e não constituem recomendação financeira.</p>

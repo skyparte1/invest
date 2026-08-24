@@ -5,7 +5,7 @@
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Abrir menu de navegação"><span class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="mainNav">
                 <ul class="navbar-nav mx-auto mb-3 mb-lg-0">
-                    <li class="nav-item"><a class="nav-link" href="{{ url('/#inicio') }}">Início</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('home') }}" @if (request()->routeIs('home')) aria-current="page" @endif>Início</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('learn.index') }}" @if (request()->routeIs('learn.*')) aria-current="page" @endif>Aprender</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('investments.index') }}" @if (request()->routeIs('investments.*')) aria-current="page" @endif>Investimentos</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('simulator.index') }}" @if (request()->routeIs('simulator.*')) aria-current="page" @endif>Simulador</a></li>
@@ -16,7 +16,8 @@
                         <a class="btn btn-link" href="{{ route('login') }}">Entrar</a>
                         <a class="btn btn-primary" href="{{ route('register') }}">Criar conta</a>
                     @else
-                        <a class="btn btn-link" href="{{ route('dashboard') }}">Dashboard</a>
+                        <a class="btn btn-link" href="{{ route('dashboard') }}" @if (request()->routeIs('dashboard')) aria-current="page" @endif>Dashboard</a>
+                        <a class="btn btn-link" href="{{ route('profile.edit') }}" @if (request()->routeIs('profile.*')) aria-current="page" @endif>Perfil</a>
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
                             <button class="btn btn-outline-primary w-100" type="submit">Sair</button>
