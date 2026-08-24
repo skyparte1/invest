@@ -192,6 +192,120 @@ Progresso e favoritos pertencem exclusivamente ao usuário autenticado. Progress
 - nome e e-mail são normalizados e validados; o e-mail permanece único;
 - o `.env` e credenciais reais não são versionados.
 
+## Deploy temporário no Railway
+
+Este é um fluxo de demonstração em uma única instância. O Railway utiliza **Railpack** para detectar o `composer.json` e o arquivo `artisan`: ele instala as dependências PHP, detecta o `package.json`, instala as dependências npm, executa o script `npm run build`, configura `public/` como document root e inicia o Laravel com FrankenPHP na porta fornecida pela plataforma. Não é necessário configurar Docker, Procfile, `railway.json`, build command ou start command.
+
+O servidor detectado pelo Railpack já escuta no endereço e na variável `PORT` exigidos pelo Railway. Não defina uma porta fixa e não crie manualmente a variável `PORT`.
+
+### 1. Criar os serviços
+
+1. No Railway, crie um projeto vazio.
+2. Adicione um serviço a partir do repositório GitHub da Invest.
+3. No mesmo projeto, adicione o template oficial **MySQL**. Não escolha PostgreSQL.
+4. No serviço da aplicação, gere um domínio em **Settings → Networking → Public Networking**.
+5. Mantenha uma única réplica para esta demonstração temporária.
+
+### 2. Gerar a APP_KEY
+
+No computador local, execute:
+
+```bash
+php artisan key:generate --show
+```
+
+Copie o valor completo retornado, começando por `base64:`, para a variável `APP_KEY` do serviço da aplicação. Não coloque essa chave no GitHub, no README ou no `.env.example`.
+
+### 3. Configurar variáveis
+
+Adicione estas variáveis no serviço da aplicação:
+
+```dotenv
+APP_NAME=Invest
+APP_ENV=production
+APP_DEBUG=false
+APP_URL=https://dominio-gerado.up.railway.app
+APP_KEY=base64:CHAVE_GERADA_FORA_DO_REPOSITORIO
+APP_TIMEZONE=America/Sao_Paulo
+APP_LOCALE=pt_BR
+APP_FALLBACK_LOCALE=pt_BR
+
+LOG_CHANNEL=stack
+LOG_STACK=single
+LOG_LEVEL=warning
+
+DB_CONNECTION=mysql
+DB_HOST=${{MySQL.MYSQLHOST}}
+DB_PORT=${{MySQL.MYSQLPORT}}
+DB_DATABASE=${{MySQL.MYSQLDATABASE}}
+DB_USERNAME=${{MySQL.MYSQLUSER}}
+DB_PASSWORD=${{MySQL.MYSQLPASSWORD}}
+
+SESSION_DRIVER=file
+SESSION_SECURE_COOKIE=true
+CACHE_STORE=file
+QUEUE_CONNECTION=sync
+
+TRUSTED_PROXIES=*
+RAILPACK_NODE_VERSION=22
+RAILPACK_SKIP_MIGRATIONS=true
+```
+
+`MySQL` deve ser substituído pelo nome exato do serviço de banco caso ele tenha sido renomeado. Use referências de variáveis do Railway, não copie credenciais para o repositório. O mapeamento é direto: `MYSQLHOST` para `DB_HOST`, `MYSQLPORT` para `DB_PORT`, `MYSQLDATABASE` para `DB_DATABASE`, `MYSQLUSER` para `DB_USERNAME` e `MYSQLPASSWORD` para `DB_PASSWORD`.
+
+Depois que o domínio público for gerado, ajuste `APP_URL` para a URL HTTPS exata. `TRUSTED_PROXIES=*` é definido apenas no Railway: o serviço não fica diretamente exposto, e essa configuração permite que o Laravel reconheça os headers `X-Forwarded-*` enviados pelo proxy da plataforma. Localmente, a variável permanece vazia e o comportamento anterior é preservado.
+
+`SESSION_DRIVER=file` e `CACHE_STORE=file` são suficientes para uma única instância temporária. Sessões podem ser perdidas em reinícios ou novos deploys porque o filesystem do serviço é efêmero; os dados importantes — usuários, metas, progresso, favoritos, conteúdos, investimentos e fontes — permanecem no MySQL. Não há uploads persistentes nesta versão.
+
+### 4. Configurar build, pre-deploy e health check
+
+Deixe **Build Command** e **Start Command** vazios para usar a detecção do Railpack. Em **Pre-deploy Command**, configure:
+
+```bash
+php artisan migrate --force && php artisan db:seed --force
+```
+
+`RAILPACK_SKIP_MIGRATIONS=true` evita que o startup automático repita migrations e seed. O pre-deploy executa depois do build e antes de disponibilizar a nova versão; se falhar, o deployment não prossegue. Nunca use `migrate:fresh`.
+
+Configure o **Healthcheck Path** como:
+
+```text
+/health
+```
+
+O endpoint retorna somente `{"status":"ok"}` e não consulta o banco. O Railpack também executa as otimizações do Laravel e serve os arquivos gerados pelo Vite em `public/build`.
+
+### 5. Validar a demonstração
+
+Após o deployment ficar ativo:
+
+1. abra `https://DOMINIO/health` e confirme HTTP 200 com `{"status":"ok"}`;
+2. teste `/`, `/aprender`, `/investimentos`, `/simulador`, `/login` e `/register`;
+3. cadastre um usuário pela interface;
+4. valide dashboard, progresso, favoritos, planejamento, perfil, logout e uma nova sessão;
+5. confirme no navegador que CSS, Bootstrap, JavaScript, Chart.js e o menu móvel carregam sem erros 404;
+6. confirme que a navegação permanece em HTTPS e que formulários com CSRF funcionam.
+
+Para uma demonstração somente como usuário comum, nenhum passo adicional é necessário. Para testar a administração, instale e autentique a Railway CLI, vincule o projeto e entre no container em execução:
+
+```bash
+railway ssh
+php artisan tinker
+```
+
+No Tinker, promova a conta criada pela interface:
+
+```php
+$user = App\Models\User::where('email', 'EMAIL_DA_CONTA')->firstOrFail();
+$user->forceFill(['is_admin' => true])->save();
+```
+
+Não crie usuário ou administrador por seed. Depois, acesse `/admin` e valide conteúdos, investimentos e fontes.
+
+### 6. Encerrar depois da apresentação
+
+Se os dados precisarem ser preservados, produza um backup antes de remover serviços. Para interromper custos e acesso público após a demonstração, remova o serviço da aplicação e o serviço MySQL — ou exclua integralmente o projeto temporário pelo painel do Railway. A remoção do banco elimina usuários e demais dados persistidos e deve ser tratada como definitiva.
+
 ## Deploy em produção
 
 Este fluxo é portátil entre Render, Railway, VPS Linux e outros hosts compatíveis com PHP e Laravel. Ajuste apenas os mecanismos próprios de cada infraestrutura.
