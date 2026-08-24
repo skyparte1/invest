@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Content;
+use App\Support\SafeMarkdown;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 
 class LearningController extends Controller
 {
@@ -46,10 +46,7 @@ class LearningController extends Controller
             ->limit(3)
             ->get();
 
-        $bodyHtml = Str::markdown($content->body, [
-            'html_input' => 'strip',
-            'allow_unsafe_links' => false,
-        ]);
+        $bodyHtml = SafeMarkdown::render($content->body);
 
         return view('learn.show', compact('content', 'relatedContents', 'bodyHtml'));
     }

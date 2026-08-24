@@ -59,9 +59,12 @@ h1 { max-width: 760px; margin-bottom: 1.4rem; font-size: clamp(2.55rem,6vw,4.8re
 .journey-step { display: flex; gap: 1rem; height: 100%; padding: 1.5rem; background: #fff; border: 1px solid var(--line); border-radius: var(--radius); }
 .journey-step > span { display: grid; flex: 0 0 38px; place-items: center; width: 38px; height: 38px; color: #fff; background: var(--primary); border-radius: 50%; font-weight: 700; }
 .investment-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 1rem; }
-.investment-card { min-height: 180px; padding: 1.5rem; background: #fff; border: 1px solid var(--line); border-radius: 16px; }
+.investment-card { position: relative; min-height: 180px; padding: 1.5rem; background: #fff; border: 1px solid var(--line); border-radius: 16px; }
+.investment-card h3 a, #investments-title a { color: inherit; text-decoration: none; }
+.investment-card h3 a:hover, .investment-card h3 a:focus, #investments-title a:hover, #investments-title a:focus { color: var(--primary); text-decoration: underline; }
 .investment-card:first-child { background: var(--primary); border-color: var(--primary); }
 .investment-card:first-child h3, .investment-card:first-child p, .investment-card:first-child span { color: #fff; }
+.investment-card:first-child h3 a:hover, .investment-card:first-child h3 a:focus { color: #fff; }
 .investment-card > span { display: inline-block; margin-bottom: 2rem; color: var(--primary); font-size: .74rem; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; }
 .education-notice { display: flex; align-items: flex-start; gap: 1.25rem; padding: 2rem; background: #f1f6ff; border: 1px solid #cfdff8; border-radius: var(--radius); }
 .notice-symbol { display: grid; flex: 0 0 42px; place-items: center; width: 42px; height: 42px; color: var(--primary); background: #fff; border-radius: 50%; font-family: Georgia,serif; font-size: 1.2rem; font-weight: 700; }
@@ -154,11 +157,49 @@ h1 { max-width: 760px; margin-bottom: 1.4rem; font-size: clamp(2.55rem,6vw,4.8re
 .source-item p { margin-bottom: .65rem; color: var(--muted); font-size: .82rem; }
 .source-item a { color: var(--primary); font-size: .88rem; font-weight: 700; }
 .related-section { max-width: 1100px; margin: 5rem auto 0; }
+
+.catalog-hero { padding: 5.75rem 0 4.75rem; background: linear-gradient(135deg,#f8fbff 0%,#eef5ff 100%); }
+.catalog-hero h1 { margin-bottom: 1.25rem; font-size: clamp(2.6rem,6vw,4.5rem); }
+.catalog-hero p { max-width: 760px; margin: 0; color: var(--muted); font-size: clamp(1.05rem,2vw,1.22rem); }
+.catalog-section { padding: 4.5rem 0 6.5rem; }
+.catalog-notice { display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 2.5rem; padding: 1.4rem; background: #f1f6ff; border: 1px solid #cfdff8; border-radius: var(--radius); }
+.catalog-notice p { margin: 0; color: var(--muted); }
+.catalog-controls { display: flex; align-items: flex-end; justify-content: space-between; gap: 1.5rem; margin-bottom: 1.25rem; }
+.catalog-controls .learning-filters { margin-bottom: 0; }
+.risk-filter { display: flex; flex-wrap: wrap; align-items: center; gap: .65rem; }
+.risk-filter label { color: var(--ink); font-size: .86rem; font-weight: 700; }
+.risk-filter .form-select { width: auto; min-width: 170px; border-color: #cbd6e6; }
+.risk-filter > a { color: var(--primary); font-size: .82rem; font-weight: 650; }
+.risk-disclaimer { margin-bottom: 2.25rem; color: var(--muted); font-size: .84rem; }
+.catalog-card { display: flex; flex-direction: column; padding: 1.75rem; background: #fff; border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-sm); }
+.catalog-card h2 { margin-bottom: .85rem; font-size: 1.35rem; font-weight: 750; }
+.catalog-card > p { flex-grow: 1; margin-bottom: 1.25rem; color: var(--muted); font-size: .93rem; }
+.risk-badge { display: inline-flex; align-self: flex-start; margin-bottom: 1.25rem; padding: .42rem .72rem; border: 1px solid; border-radius: 999px; font-size: .78rem; font-weight: 800; }
+.risk-low { color: #126247; background: #e9f8f1; border-color: #aedfc9; }
+.risk-moderate { color: #775808; background: #fff8df; border-color: #ead48d; }
+.risk-high { color: #912f35; background: #fff0f1; border-color: #efb9bd; }
+.risk-variable { color: #4d458c; background: #f1efff; border-color: #cbc5f4; }
+.investment-detail-shell .learning-breadcrumb { max-width: 1000px; }
+.investment-article { max-width: 1000px; }
+.risk-explanation { margin: 2rem clamp(1.35rem,7vw,5.5rem) 0; padding: 1.25rem; background: #f7f5ff; border: 1px solid #d9d3f3; border-radius: 14px; }
+.risk-explanation strong { display: block; margin-bottom: .35rem; }
+.risk-explanation p { margin: 0; color: var(--muted); font-size: .9rem; }
+.investment-sections { padding: 1rem clamp(1.35rem,7vw,5.5rem) 2rem; }
+.investment-section { padding: 2.25rem 0; border-bottom: 1px solid var(--line); overflow-wrap: anywhere; }
+.investment-section:last-child { border-bottom: 0; }
+.investment-section h2 { margin-bottom: 1rem; font-size: clamp(1.4rem,3vw,1.8rem); font-weight: 750; }
+.investment-section h2:first-child { margin-top: 0; }
+.investment-section p, .investment-section li { color: #35435b; }
+.investment-section li + li { margin-top: .4rem; }
+.learn-more { margin: 1rem 0 0; font-size: .88rem; }
+.learn-more a { color: var(--primary); font-weight: 700; }
+.attention-section { margin-top: 1rem; padding: 1.5rem; background: #fffaf0; border: 1px solid #eadcb8; border-radius: 14px; }
 @media (max-width: 991.98px) {
     .navbar-collapse { padding: 1rem 0 1.25rem; } .nav-link { margin: 0; padding: .6rem 0; }
     .nav-actions .btn { width: 100%; } .hero { padding: 5.5rem 0; } .hero-visual { min-height: 330px; }
     .visual-card-main { right: 8%; } .visual-card-small { right: 18%; }
     .investment-grid { grid-template-columns: repeat(2,1fr); } .footer-nav { justify-content: flex-start; }
+    .catalog-controls { align-items: stretch; flex-direction: column; }
 }
 @media (max-width: 575.98px) {
     .navbar { min-height: 68px; } .hero { padding: 4rem 0; } .hero-visual { min-height: 290px; }
@@ -178,5 +219,11 @@ h1 { max-width: 760px; margin-bottom: 1.4rem; font-size: clamp(2.55rem,6vw,4.8re
     .learning-article { border-radius: 18px; }
     .article-body { padding-top: 2.25rem; padding-bottom: 2.25rem; }
     .article-notice { flex-direction: column; }
+    .catalog-hero { padding: 4rem 0 3.5rem; }
+    .catalog-section { padding: 3rem 0 4.5rem; }
+    .catalog-notice { flex-direction: column; }
+    .catalog-controls .learning-filters { width: calc(100% + var(--bs-gutter-x)); }
+    .risk-filter { align-items: stretch; flex-direction: column; }
+    .risk-filter .form-select { width: 100%; }
 }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }

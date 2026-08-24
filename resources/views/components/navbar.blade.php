@@ -7,7 +7,7 @@
                 <ul class="navbar-nav mx-auto mb-3 mb-lg-0">
                     <li class="nav-item"><a class="nav-link" href="{{ url('/#inicio') }}">Início</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('learn.index') }}" @if (request()->routeIs('learn.*')) aria-current="page" @endif>Aprender</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ url('/#investimentos') }}">Investimentos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('investments.index') }}" @if (request()->routeIs('investments.*')) aria-current="page" @endif>Investimentos</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ url('/#como-funciona') }}">Simulador</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ url('/#planejamento') }}">Planejamento</a></li>
                 </ul>

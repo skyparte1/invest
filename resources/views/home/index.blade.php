@@ -46,15 +46,14 @@
 
     <section class="section" id="investimentos" aria-labelledby="investments-title">
         <div class="container">
-            <div class="row align-items-end mb-5 g-3"><div class="col-lg-7"><span class="eyebrow">Explore possibilidades</span><h2 id="investments-title">Conheça diferentes tipos de investimento</h2></div><div class="col-lg-5"><p class="section-intro">Conteúdos objetivos para ajudar você a compreender como cada modalidade funciona.</p></div></div>
+            <div class="row align-items-end mb-5 g-3"><div class="col-lg-7"><span class="eyebrow">Explore possibilidades</span><h2 id="investments-title"><a href="{{ route('investments.index') }}">Conheça diferentes tipos de investimento</a></h2></div><div class="col-lg-5"><p class="section-intro">Conteúdos objetivos para ajudar você a compreender como cada modalidade funciona.</p><a class="learning-card-link" href="{{ route('investments.index') }}">Ver catálogo completo <span aria-hidden="true">→</span></a></div></div>
             <div class="investment-grid">
-                <article class="investment-card"><span>Renda fixa</span><h3>Poupança</h3><p>Conheça suas principais características.</p></article>
-                <article class="investment-card"><span>Renda fixa</span><h3>Tesouro Selic</h3><p>Entenda o funcionamento desta modalidade.</p></article>
-                <article class="investment-card"><span>Renda fixa</span><h3>CDB</h3><p>Aprenda os conceitos básicos desse investimento.</p></article>
-                <article class="investment-card"><span>Renda fixa</span><h3>LCI/LCA</h3><p>Explore características e pontos de atenção.</p></article>
-                <article class="investment-card"><span>Fundos</span><h3>Fundos de investimento</h3><p>Compreenda sua estrutura e funcionamento.</p></article>
-                <article class="investment-card"><span>Renda variável</span><h3>Fundos imobiliários</h3><p>Conheça seus conceitos essenciais.</p></article>
-                <article class="investment-card"><span>Renda variável</span><h3>Ações</h3><p>Descubra os fundamentos desta modalidade.</p></article>
+                <article class="investment-card"><span>Renda fixa</span><h3><a class="stretched-link" href="{{ route('investments.show', 'poupanca') }}">Poupança</a></h3><p>Conheça suas principais características.</p></article>
+                <article class="investment-card"><span>Renda fixa</span><h3><a class="stretched-link" href="{{ route('investments.show', 'tesouro-selic') }}">Tesouro Selic</a></h3><p>Entenda o funcionamento desta modalidade.</p></article>
+                <article class="investment-card"><span>Renda fixa</span><h3><a class="stretched-link" href="{{ route('investments.show', 'cdb') }}">CDB</a></h3><p>Aprenda os conceitos básicos desse investimento.</p></article>
+                <article class="investment-card"><span>Fundos</span><h3><a class="stretched-link" href="{{ route('investments.show', 'fundos-de-investimento') }}">Fundos de investimento</a></h3><p>Compreenda sua estrutura e funcionamento.</p></article>
+                <article class="investment-card"><span>Fundos</span><h3><a class="stretched-link" href="{{ route('investments.show', 'fundos-imobiliarios') }}">Fundos imobiliários</a></h3><p>Conheça seus conceitos essenciais.</p></article>
+                <article class="investment-card"><span>Renda variável</span><h3><a class="stretched-link" href="{{ route('investments.show', 'acoes') }}">Ações</a></h3><p>Descubra os fundamentos desta modalidade.</p></article>
             </div>
         </div>
     </section>

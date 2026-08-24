@@ -28,4 +28,11 @@ class Source extends Model
             ->withPivot('sort_order')
             ->orderByPivot('sort_order');
     }
+
+    public function investments(): BelongsToMany
+    {
+        return $this->belongsToMany(Investment::class)
+            ->withPivot('sort_order')
+            ->orderByPivot('sort_order');
+    }
 }

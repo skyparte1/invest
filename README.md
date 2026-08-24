@@ -99,7 +99,7 @@ Os testes automatizados utilizam SQLite apenas em memória e isoladamente. A apl
 
 ## Status
 
-**Invest v0.4 — Módulo Aprender**
+**Invest v0.5 — Catálogo de Investimentos**
 
 Disponível nesta versão:
 
@@ -122,16 +122,24 @@ Disponível nesta versão:
 - fontes e referências institucionais associadas a cada conteúdo publicado;
 - conteúdos relacionados da mesma categoria;
 - seeders educacionais para um ambiente demonstrável.
+- catálogo público de modalidades de investimento;
+- categorias e filtros combináveis por categoria e risco;
+- páginas individuais com funcionamento, risco, liquidez e rentabilidade conceitual;
+- classificação didática de risco sempre acompanhada de texto explicativo;
+- fontes oficiais associadas pelo relacionamento `investment ↔ source`;
+- integração do catálogo com landing page, navbar, footer e dashboard.
 
 ## Política editorial
 
-Todo conteúdo financeiro publicado deve possuir ao menos uma fonte confiável associada. Os conteúdos iniciais foram sintetizados em linguagem própria a partir de materiais oficiais do Banco Central do Brasil e da Comissão de Valores Mobiliários, com registro da data de acesso. A área `Aprender` é pública e possui finalidade exclusivamente educacional e informativa.
+Todo conteúdo financeiro publicado deve possuir ao menos uma fonte confiável associada. Os conteúdos iniciais foram sintetizados em linguagem própria a partir de materiais oficiais do Banco Central do Brasil, Comissão de Valores Mobiliários, Tesouro Direto e Fundo Garantidor de Créditos, com registro da data de acesso. As áreas `Aprender` e `Investimentos` são públicas e possuem finalidade exclusivamente educacional e informativa.
+
+A classificação de risco apresenta características gerais e não substitui a avaliação das condições específicas de cada produto. Ela não representa suitability, recomendação ou perfil de investidor.
 
 Ainda não implementado:
 
 - painel administrativo e edição de conteúdos;
 - progresso, favoritos, quizzes e recursos personalizados de aprendizagem;
-- catálogo funcional de investimentos;
+- comparador, carteira e acompanhamento de investimentos do usuário;
 - simulador e planejamento financeiro;
 - tabelas e regras de negócio específicas da Invest;
 - integrações com dados externos.

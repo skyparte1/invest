@@ -7,7 +7,7 @@
             </div>
             <div class="col-lg-8">
                 <nav class="footer-nav" aria-label="Navegação do rodapé">
-                    <a href="{{ url('/#inicio') }}">Sobre</a><a href="{{ route('learn.index') }}">Educação financeira</a><a href="{{ url('/#investimentos') }}">Investimentos</a><a href="#">Termos</a><a href="#">Privacidade</a><a href="#academic-note">Projeto acadêmico</a>
+                    <a href="{{ url('/#inicio') }}">Sobre</a><a href="{{ route('learn.index') }}">Educação financeira</a><a href="{{ route('investments.index') }}">Investimentos</a><a href="#">Termos</a><a href="#">Privacidade</a><a href="#academic-note">Projeto acadêmico</a>
                 </nav>
             </div>
         </div>
