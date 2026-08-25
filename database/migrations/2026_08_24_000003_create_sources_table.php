@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->string('institution');
             $table->string('title');
-            $table->text('url')->unique();
+            $table->text('url');
             $table->date('publication_date')->nullable();
             $table->date('accessed_at');
             $table->timestamps();

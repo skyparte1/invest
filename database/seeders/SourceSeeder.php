@@ -61,7 +61,10 @@ class SourceSeeder extends Seeder
         ];
 
         foreach ($sources as $source) {
-            Source::query()->updateOrCreate(['url' => $source['url']], $source);
+            Source::query()
+                ->firstOrNew(['url' => $source['url']])
+                ->forceFill($source + ['url_hash' => hash('sha256', $source['url'])])
+                ->save();
         }
     }
 }

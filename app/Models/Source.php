@@ -14,6 +14,13 @@ class Source extends Model
         'institution', 'title', 'url', 'publication_date', 'accessed_at',
     ];
 
+    protected static function booted(): void
+    {
+        static::saving(function (Source $source): void {
+            $source->url_hash = hash('sha256', $source->url);
+        });
+    }
+
     protected function casts(): array
     {
         return [
