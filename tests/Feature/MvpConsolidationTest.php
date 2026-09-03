@@ -31,9 +31,12 @@ class MvpConsolidationTest extends TestCase
 
     public function test_navbar_adapts_to_guest_and_authenticated_user(): void
     {
-        $guest = $this->get(route('investments.index'));
-        $guest->assertSee('Entrar')->assertSee('Criar conta')->assertDontSee('Perfil');
-        $guest->assertSee('aria-current="page"', false);
+        $guest = $this->get(route('login'));
+        $guest->assertOk()->assertSee('Entrar')->assertSee('Criar conta')->assertDontSee('Perfil');
+        $guest->assertDontSee('<a class="nav-link" href="'.route('learn.index').'"', false)
+            ->assertDontSee('<a class="nav-link" href="'.route('investments.index').'"', false)
+            ->assertDontSee('<a class="nav-link" href="'.route('simulator.index').'"', false)
+            ->assertDontSee('<a class="nav-link" href="'.route('planning.index').'"', false);
 
         $profile = $this->actingAs(User::factory()->create())->get(route('profile.edit'));
         $profile->assertOk()->assertSee('Dashboard')->assertSee('Perfil')->assertSee('Sair');

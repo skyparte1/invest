@@ -57,7 +57,7 @@ class V1FeaturesTest extends TestCase
         $this->get(route('dashboard'))->assertOk()->assertSee('1 de 1 conteúdos');
     }
 
-    public function test_learning_status_filter_is_personal_and_guest_ignores_it(): void
+    public function test_learning_status_filter_is_personal_and_guest_is_redirected(): void
     {
         $done = $this->content(true, 'feito');
         $pending = $this->content(true, 'pendente');
@@ -65,7 +65,7 @@ class V1FeaturesTest extends TestCase
         $this->actingAs($user)->put(route('learn.progress.store', $done));
         $this->get(route('learn.index', ['status' => 'concluido']))->assertSee($done->title)->assertDontSee($pending->title);
         auth()->logout();
-        $this->get(route('learn.index', ['status' => 'concluido']))->assertSee($done->title)->assertSee($pending->title)->assertDontSee('Pendente');
+        $this->get(route('learn.index', ['status' => 'concluido']))->assertRedirect(route('login'));
     }
 
     public function test_favorites_are_idempotent_reversible_filterable_and_combinable(): void
@@ -82,11 +82,11 @@ class V1FeaturesTest extends TestCase
         $this->assertDatabaseCount('investment_user_favorites', 0);
     }
 
-    public function test_guest_favorite_filter_is_ignored_and_draft_cannot_be_favorited(): void
+    public function test_guest_catalog_and_favorite_action_are_protected_and_draft_cannot_be_favorited(): void
     {
         $published = $this->investment();
         $draft = $this->investment(false, 'draft');
-        $this->get(route('investments.index', ['favoritos' => 1]))->assertSee($published->name);
+        $this->get(route('investments.index', ['favoritos' => 1]))->assertRedirect(route('login'));
         $this->put(route('investments.favorite.store', $published))->assertRedirect(route('login'));
         $this->actingAs(User::factory()->create())->put(route('investments.favorite.store', $draft))->assertNotFound();
     }

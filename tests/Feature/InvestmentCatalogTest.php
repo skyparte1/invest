@@ -13,14 +13,20 @@ class InvestmentCatalogTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_catalog_is_public_and_only_lists_published_investments(): void
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->actingAs(User::factory()->create());
+    }
+
+    public function test_catalog_only_lists_published_investments(): void
     {
         $category = $this->category('Renda fixa', 'renda-fixa');
         $published = $this->investment($category, 'CDB', 'cdb');
         $draft = $this->investment($category, 'Rascunho', 'rascunho', 'variable', false);
 
         $this->get(route('investments.index'))->assertOk()->assertSee($published->name)->assertDontSee($draft->name);
-        $this->actingAs(User::factory()->create())->get(route('investments.index'))->assertOk();
     }
 
     public function test_category_risk_and_combined_filters_work(): void

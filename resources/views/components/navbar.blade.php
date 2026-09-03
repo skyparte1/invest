@@ -6,10 +6,12 @@
             <div class="collapse navbar-collapse" id="mainNav">
                 <ul class="navbar-nav mx-auto mb-3 mb-lg-0">
                     <li class="nav-item"><a class="nav-link" href="{{ route('home') }}" @if (request()->routeIs('home')) aria-current="page" @endif>Início</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('learn.index') }}" @if (request()->routeIs('learn.*')) aria-current="page" @endif>Aprender</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('investments.index') }}" @if (request()->routeIs('investments.*')) aria-current="page" @endif>Investimentos</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('simulator.index') }}" @if (request()->routeIs('simulator.*')) aria-current="page" @endif>Simulador</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('planning.index') }}" @if (request()->routeIs('planning.*')) aria-current="page" @endif>Planejamento</a></li>
+                    @auth
+                        <li class="nav-item"><a class="nav-link" href="{{ route('learn.index') }}" @if (request()->routeIs('learn.*')) aria-current="page" @endif>Aprender</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('investments.index') }}" @if (request()->routeIs('investments.*')) aria-current="page" @endif>Investimentos</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('simulator.index') }}" @if (request()->routeIs('simulator.*')) aria-current="page" @endif>Simulador</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('planning.index') }}" @if (request()->routeIs('planning.*')) aria-current="page" @endif>Planejamento</a></li>
+                    @endauth
                 </ul>
                 <div class="nav-actions d-flex flex-column flex-lg-row gap-2">
                     @guest

@@ -13,7 +13,14 @@ class LearningTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_learning_page_is_public_and_lists_only_published_contents(): void
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->actingAs(User::factory()->create());
+    }
+
+    public function test_learning_page_lists_only_published_contents(): void
     {
         $category = $this->createCategory('Fundamentos', 'fundamentos');
         $published = $this->createContent($category, 'Conteúdo publicado', 'publicado', true);

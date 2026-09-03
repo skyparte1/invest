@@ -155,16 +155,15 @@ Disponível nesta versão:
 
 ## Administração
 
-Nenhum usuário administrativo é criado por seed, cadastro ou configuração fixa. Após criar uma conta normalmente, promova-a manualmente em um ambiente controlado:
+### Criar administrador
+
+Nenhum usuário administrativo é criado por seed, cadastro ou configuração fixa. Para criar uma conta administrativa ou promover uma conta existente, execute:
 
 ```bash
-php artisan tinker
+php artisan app:create-admin
 ```
 
-```php
-$user = App\Models\User::where('email', 'email-do-administrador@example.com')->firstOrFail();
-$user->forceFill(['is_admin' => true])->save();
-```
+O comando solicita nome, e-mail, senha e confirmação interativamente; as senhas não são exibidas no terminal. Não existem credenciais administrativas padrão. O administrador utiliza a mesma autenticação dos demais usuários, e seu acesso à área `/admin` depende exclusivamente do campo `is_admin`. O comando também pode ser executado pelo Console do serviço no Railway.
 
 O campo `is_admin` não é preenchível em massa e não é aceito pelos formulários de cadastro ou perfil. A área `/admin` exige autenticação e autorização administrativa; usuários comuns recebem HTTP 403.
 
@@ -280,27 +279,20 @@ O endpoint retorna somente `{"status":"ok"}` e não consulta o banco. O Railpack
 Após o deployment ficar ativo:
 
 1. abra `https://DOMINIO/health` e confirme HTTP 200 com `{"status":"ok"}`;
-2. teste `/`, `/aprender`, `/investimentos`, `/simulador`, `/login` e `/register`;
-3. cadastre um usuário pela interface;
-4. valide dashboard, progresso, favoritos, planejamento, perfil, logout e uma nova sessão;
+2. teste as páginas públicas `/`, `/login` e `/register`;
+3. confirme que `/aprender`, `/investimentos`, `/simulador`, `/planejamento`, `/dashboard` e `/perfil` redirecionam visitantes para o login;
+4. cadastre um usuário pela interface e valide dashboard, progresso, favoritos, planejamento, perfil, logout e uma nova sessão;
 5. confirme no navegador que CSS, Bootstrap, JavaScript, Chart.js e o menu móvel carregam sem erros 404;
 6. confirme que a navegação permanece em HTTPS e que formulários com CSRF funcionam.
 
-Para uma demonstração somente como usuário comum, nenhum passo adicional é necessário. Para testar a administração, instale e autentique a Railway CLI, vincule o projeto e entre no container em execução:
+Para uma demonstração somente como usuário comum, nenhum passo adicional é necessário. Para testar a administração, abra o Console do serviço no Railway ou entre no container em execução e execute:
 
 ```bash
 railway ssh
-php artisan tinker
+php artisan app:create-admin
 ```
 
-No Tinker, promova a conta criada pela interface:
-
-```php
-$user = App\Models\User::where('email', 'EMAIL_DA_CONTA')->firstOrFail();
-$user->forceFill(['is_admin' => true])->save();
-```
-
-Não crie usuário ou administrador por seed. Depois, acesse `/admin` e valide conteúdos, investimentos e fontes.
+O comando cria uma conta ou promove uma conta existente sem duplicá-la. Depois, acesse `/admin` e valide conteúdos, investimentos e fontes.
 
 ### 6. Encerrar depois da apresentação
 

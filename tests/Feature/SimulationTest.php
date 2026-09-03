@@ -12,7 +12,14 @@ class SimulationTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_simulator_is_public_and_available_to_authenticated_users(): void
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->actingAs(User::factory()->create());
+    }
+
+    public function test_simulator_is_available_to_authenticated_users(): void
     {
         $this->get(route('simulator.index'))
             ->assertOk()
@@ -20,9 +27,6 @@ class SimulationTest extends TestCase
             ->assertSee('Simular cenário')
             ->assertDontSee('id="simulation-chart"', false);
 
-        $this->actingAs(User::factory()->create())
-            ->get(route('simulator.index'))
-            ->assertOk();
     }
 
     public function test_valid_post_displays_zero_rate_result_disclaimers_and_chart_data(): void
