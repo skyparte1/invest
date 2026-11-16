@@ -408,7 +408,7 @@ i = (1 + r)^(1/12) - 1
 
 O valor inicial evolui por `PV(1+i)^n`. Os aportes são considerados ao final de cada mês e, quando `i` é diferente de zero, evoluem por `PMT × [((1+i)^n - 1) / i]`. Na taxa zero, os aportes são simplesmente multiplicados pelo número de meses.
 
-Os valores apresentados são brutos. A simulação não considera impostos, tarifas, inflação, custos operacionais ou regras específicas de produtos. Não utiliza Selic, CDI, IPCA, cotações, APIs ou qualquer previsão de mercado, e não representa garantia de rentabilidade ou recomendação de investimento.
+O intervalo aceito é **−100% < taxa anual ≤ 100%**. Os valores são brutos e excluem impostos, tarifas e inflação. A taxa constante simplifica a volatilidade. Selecionar a modalidade preserva a taxa digitada. O botão **Usar esta referência** aplica uma observação datada do catálogo local do BCB e da B3. A edição manual desvincula a referência. Consulte a [documentação técnica de referências](docs/referencias-do-simulador.md).
 
 ## Hipóteses do planejamento
 

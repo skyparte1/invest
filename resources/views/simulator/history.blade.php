@@ -13,9 +13,14 @@
                 <dl class="result-list">
                     <div><dt>Valor inicial</dt><dd>{{ App\Support\CurrencyFormatter::brl($simulation->initial_amount) }}</dd></div>
                     <div><dt>Aporte mensal</dt><dd>{{ App\Support\CurrencyFormatter::brl($simulation->monthly_contribution) }}</dd></div>
-                    <div><dt>Taxa anual hipotética</dt><dd>{{ App\Support\CurrencyFormatter::percentage($simulation->annual_rate) }}</dd></div>
+                    <div><dt>Taxa hipotética utilizada</dt><dd>{{ str_replace('.', ',', (string) $simulation->annual_rate) }}% a.a.</dd></div>
                     <div><dt>Prazo</dt><dd>{{ $simulation->term_months }} meses</dd></div>
                     <div><dt>Saldo bruto estimado</dt><dd>{{ App\Support\CurrencyFormatter::brl($simulation->final_balance) }}</dd></div>
+                    @php($earnings = round($simulation->final_balance - $simulation->initial_amount - $simulation->monthly_contribution * $simulation->term_months, 2))
+                    <div><dt>{{ $earnings < 0 ? 'Prejuízo estimado' : 'Rendimento estimado' }}</dt><dd>{{ App\Support\CurrencyFormatter::brl($earnings) }}</dd></div>
+                    @if ($ref = $simulation->rate_reference)
+                        <div><dt>Referência aplicada</dt><dd>{{ $ref['type'] }} · {{ $ref['name'] }} · {{ $ref['value'] }} {{ $ref['unit'] }} · {{ $ref['period'] }} ({{ $ref['date'] }})</dd></div>
+                    @endif
                 </dl>
             </article>
         @empty

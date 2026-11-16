@@ -8,6 +8,11 @@ class Simulation extends Model
 {
     protected $fillable = [
         'submission_id', 'investment_id', 'investment_name', 'initial_amount',
-        'monthly_contribution', 'annual_rate', 'term_months', 'final_balance',
+        'monthly_contribution', 'annual_rate', 'term_months', 'final_balance', 'rate_reference',
     ];
+
+    protected function casts(): array
+    {
+        return ['rate_reference' => 'array'];
+    }
 }

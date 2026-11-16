@@ -19,18 +19,13 @@ class InvestmentSimulationService
             default => throw new InvalidArgumentException('A unidade do prazo deve ser months ou years.'),
         };
 
-        $annualRateDecimal = $annualRate / 100;
-        $monthlyRate = (1 + $annualRateDecimal) ** (1 / 12) - 1;
-        $growthFactor = (1 + $monthlyRate) ** $months;
-
-        $futureInitialAmount = $initialAmount * $growthFactor;
-        $futureContributions = $monthlyRate == 0.0
-            ? $periodicContribution * $months
-            : $periodicContribution * (($growthFactor - 1) / $monthlyRate);
+        if (! is_finite($annualRate) || $annualRate <= -100 || $annualRate > 100) {
+            throw new InvalidArgumentException('Taxa anual fora do intervalo permitido.');
+        }
+        $monthlyRate = expm1(log1p($annualRate / 100) / 12);
 
         $contributionsTotal = $periodicContribution * $months;
         $totalInvested = $initialAmount + $contributionsTotal;
-        $finalBalance = $futureInitialAmount + $futureContributions;
 
         $balance = $initialAmount;
         $invested = $initialAmount;
@@ -39,7 +34,10 @@ class InvestmentSimulationService
         for ($month = 1; $month <= $months; $month++) {
             $balance *= 1 + $monthlyRate;
             $balance += $periodicContribution;
-            $invested += $periodicContribution;
+            $invested = $initialAmount + $periodicContribution * $month;
+            if ($annualRate == 0.0) {
+                $balance = $invested;
+            }
 
             $series[] = [
                 'month' => $month,
@@ -58,8 +56,8 @@ class InvestmentSimulationService
             'months' => $months,
             'contributions_total' => $contributionsTotal,
             'total_invested' => $totalInvested,
-            'final_balance' => $finalBalance,
-            'estimated_earnings' => (float) max(0, $finalBalance - $totalInvested),
+            'final_balance' => $balance,
+            'estimated_earnings' => $annualRate == 0.0 ? 0.0 : $balance - $totalInvested,
             'series' => $series,
         ];
     }

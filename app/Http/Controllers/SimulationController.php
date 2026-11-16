@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Requests\SimulationRequest;
 use App\Models\Investment;
 use App\Services\InvestmentSimulationService;
+use App\Services\ReturnReferences;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class SimulationController extends Controller
@@ -35,6 +37,14 @@ class SimulationController extends Controller
             ? null
             : Investment::published()->where('slug', $validated['investment_slug'])->first();
 
+        $reference = null;
+        if (! empty($validated['reference_id'])) {
+            $reference = ReturnReferences::forModality($selectedInvestment?->slug)[$validated['reference_id']] ?? null;
+            if (! ($reference['usable'] ?? false) || (float) $reference['value'] !== (float) $validated['annual_rate']) {
+                throw ValidationException::withMessages(['annual_rate' => 'A referência mudou ou está indisponível. Confira a taxa e simule novamente.'])->redirectTo(route('simulator.index'));
+            }
+        }
+
         $result = $service->simulate(
             (float) $validated['initial_amount'],
             (float) $validated['periodic_contribution'],
@@ -53,6 +63,7 @@ class SimulationController extends Controller
                 'term_months' => $result['months'],
                 'annual_rate' => $result['annual_rate'],
                 'final_balance' => $result['final_balance'],
+                'rate_reference' => $reference,
             ]);
 
             return to_route('simulator.history')->with('status', 'Simulação salva.');

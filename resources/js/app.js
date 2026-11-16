@@ -1,4 +1,5 @@
 import * as bootstrap from 'bootstrap';
+import { bindReturnReference } from './return-reference';
 
 document.querySelectorAll('#mainNav .nav-link, #mainNav .nav-actions a').forEach((link) => {
     link.addEventListener('click', () => {
@@ -34,6 +35,7 @@ window.addEventListener('pageshow', () => {
 const simulationChartData = document.getElementById('simulation-chart-data');
 
 const modality = document.getElementById('investment_slug');
+if (modality) bindReturnReference(modality.form);
 modality?.addEventListener('change', () => {
     document.querySelectorAll('[data-context-slug]').forEach((section) => {
         section.hidden = section.dataset.contextSlug !== modality.value;

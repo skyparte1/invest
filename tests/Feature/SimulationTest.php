@@ -4,8 +4,11 @@ namespace Tests\Feature;
 
 use App\Models\Investment;
 use App\Models\InvestmentCategory;
+use App\Models\Simulation;
 use App\Models\User;
+use App\Services\ReturnReferences;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Str;
 use Tests\TestCase;
 
 class SimulationTest extends TestCase
@@ -154,6 +157,48 @@ class SimulationTest extends TestCase
         $this->assertDatabaseCount('simulations', 1);
         $this->get(route('simulator.history'))->assertSee($investment->name)->assertSee('R$ 13.000,00');
         $this->actingAs(User::factory()->create())->get(route('simulator.history'))->assertDontSee($investment->name);
+    }
+
+    public function test_reference_catalog_and_optional_application(): void
+    {
+        $this->travelTo(now()->setDate(2026, 11, 15));
+        foreach ([
+            'poupanca' => ['Poupança'], 'tesouro-selic' => ['Meta Selic'], 'cdb' => ['100% do CDI'],
+            'fundos-de-investimento' => ['100% do CDI', 'Ibovespa'], 'fundos-imobiliarios' => ['IFIX'], 'acoes' => ['Ibovespa'],
+        ] as $slug => $names) {
+            $refs = ReturnReferences::forModality($slug);
+            $this->assertSame($names, array_column($refs, 'name'));
+        }
+        $this->investment('CDB', 'cdb');
+        $refs = ReturnReferences::forModality('cdb');
+        $id = array_key_first($refs);
+        $this->get(route('simulator.index', ['investimento' => 'cdb']))->assertSee('value="10"', false)
+            ->assertSee('aria-label="Usar esta referência: 100% do CDI"', false)->assertSee('role="status"', false);
+        $payload = $this->validPayload(['investment_slug' => 'cdb', 'reference_id' => $id, 'annual_rate' => $refs[$id]['value'], 'submission_id' => (string) Str::uuid()]);
+        $this->post(route('simulator.save'), $payload)->assertSessionHasNoErrors();
+        $this->assertSame($refs[$id]['date'], Simulation::sole()->rate_reference['date']);
+        $this->post(route('simulator.calculate'), array_merge($payload, ['annual_rate' => 3]))->assertSessionHasErrors('annual_rate');
+        $this->travel(2)->months();
+        $this->get(route('simulator.index'))->assertSee('Referência desatualizada')->assertDontSee('Usar esta referência');
+        $this->post(route('simulator.calculate'), $payload)->assertSessionHasErrors('annual_rate');
+        $this->get(route('simulator.history'))->assertSee('100% do CDI');
+        $this->travelBack();
+        $this->travelTo(now()->setDate(2026, 11, 15));
+        config(['return_references.indicators.di.value' => null]);
+        $this->get(route('simulator.index'))->assertSee('Sem taxa numérica utilizável')->assertDontSee('Usar esta referência');
+        config(['return_references.indicators.di.url' => 'javascript:alert(1)']);
+        $this->get(route('simulator.index'))->assertSee('ainda não possui referência validada')->assertDontSee('javascript:alert');
+    }
+
+    public function test_manual_loss_is_saved_and_invalid_rates_rejected(): void
+    {
+        $payload = $this->validPayload(['periodic_contribution' => 0, 'annual_rate' => '-25,5', 'term' => 1]);
+        $this->post(route('simulator.calculate'), $payload)->assertOk()->assertSee('Prejuízo estimado')->assertSee('-R$ 255,00');
+        $this->post(route('simulator.save'), $payload + ['submission_id' => (string) Str::uuid()])->assertSessionHasNoErrors();
+        $this->get(route('simulator.history'))->assertSee('-R$ 255,00')->assertDontSee('Referência aplicada');
+        foreach ([-101, -100, 101] as $rate) {
+            $this->post(route('simulator.calculate'), array_merge($payload, ['annual_rate' => $rate]))->assertSessionHasErrors('annual_rate');
+        }
     }
 
     private function validPayload(array $overrides = []): array

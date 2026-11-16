@@ -62,6 +62,7 @@ class InvestmentCatalogTest extends TestCase
         $this->get(route('investments.show', $investment->slug))
             ->assertOk()->assertSee($investment->name)->assertSee($investment->category->name)
             ->assertSee('Risco: Variável')->assertSee($investment->risk_description)
+            ->assertSee('Vídeo complementar')
             ->assertSee($investment->liquidity_description)->assertSee($source->title);
     }
 

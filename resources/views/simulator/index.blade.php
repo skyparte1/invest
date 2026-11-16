@@ -9,7 +9,7 @@
             <span class="eyebrow">Ferramenta educacional</span>
             <h1 id="simulator-title">Simule um cenário hipotético</h1>
             <a href="{{ route('simulator.history') }}">Minhas simulações salvas</a>
-            <p>Informe seus próprios parâmetros para visualizar matematicamente a evolução de um capital. Nenhuma taxa de mercado é consultada ou sugerida pela Invest.</p>
+            <p>Explore uma projeção matemática bruta, sem garantia de retorno. Uma taxa anual constante simplifica a evolução do capital e não reproduz a volatilidade de ações e fundos.</p>
         </div>
     </section>
 
@@ -53,13 +53,15 @@
                             </div>
 
                             <div class="col-md-6">
-                                <label class="form-label" for="annual_rate">Taxa anual hipotética (%)</label>
+                                <label class="form-label" for="annual_rate">Taxa hipotética utilizada (% ao ano)</label>
                                 <div class="input-group has-validation">
                                     <input class="form-control @error('annual_rate') is-invalid @enderror" id="annual_rate" name="annual_rate" type="text" inputmode="decimal" value="{{ old('annual_rate', $form['annual_rate']) }}" maxlength="10" required aria-describedby="rate-help @error('annual_rate') rate-error @enderror" @error('annual_rate') aria-invalid="true" @enderror>
                                     <span class="input-group-text">% a.a.</span>
                                     @error('annual_rate')<div class="invalid-feedback" id="rate-error">{{ $message }}</div>@enderror
                                 </div>
-                                <div class="form-text" id="rate-help">Uma taxa informada por você, entre 0% e 100% ao ano.</div>
+                                <div class="form-text" id="rate-help">Informe uma taxa maior que −100% e de até 100% ao ano. Use o sinal de menos para simular perdas.</div>
+                                <input type="hidden" id="reference_id" name="reference_id" value="{{ $errors->any() ? '' : ($form['reference_id'] ?? '') }}">
+                                <span id="reference-status" role="status"></span>
                             </div>
 
                             <div class="col-6 col-md-3">
@@ -107,6 +109,31 @@
                                     <dt>Rentabilidade conceitual</dt><dd>{{ $investment->profitability_description }}</dd>
                                 </dl>
                                 <a href="{{ route('investments.show', $investment->slug) }}">Consultar detalhes e fontes</a>
+                                <h4 class="mt-3">Referência de rentabilidade</h4>
+                                @if ($investment->slug === 'fundos-de-investimento')
+                                    <p>Escolha um índice para comparar. Cada fundo segue sua classe e estratégia, com custos e desempenho próprios.</p>
+                                @endif
+                                @forelse (App\Services\ReturnReferences::forModality($investment->slug) as $id => $ref)
+                                    <div class="mb-3">
+                                        <strong>{{ $ref['type'] }} · {{ $ref['name'] }}</strong>
+                                        <p>{{ $ref['period'] }} · {{ $ref['date'] ?? 'Data indisponível' }}
+                                            @if ($ref['value'] !== null)
+                                                · {{ str_replace('.', ',', (string) $ref['value']) }} {{ $ref['unit'] }}
+                                            @endif
+                                        </p>
+                                        <p>{{ $ref['description'] }} {{ $ref['notes'] }}</p>
+                                        <a href="{{ $ref['url'] }}">Fonte oficial de {{ $ref['name'] }}</a>
+                                        @if ($ref['usable'])
+                                            <button type="button" class="btn btn-outline-primary btn-sm" data-reference="{{ $id }}" data-rate="{{ $ref['value'] }}" aria-label="Usar esta referência: {{ $ref['name'] }}">Usar esta referência</button>
+                                        @elseif (! $ref['fresh'])
+                                            <p>Referência desatualizada ou sem data validada.</p>
+                                        @else
+                                            <p>Sem taxa numérica utilizável.</p>
+                                        @endif
+                                    </div>
+                                @empty
+                                    <p>Esta modalidade ainda não possui referência validada.</p>
+                                @endforelse
                             </section>
                         @endforeach
 
@@ -137,8 +164,8 @@
                             <div><dt>Valor inicial</dt><dd>{{ App\Support\CurrencyFormatter::brl($result['initial_amount']) }}</dd></div>
                             <div><dt>Aportes acumulados</dt><dd>{{ App\Support\CurrencyFormatter::brl($result['contributions_total']) }}</dd></div>
                             <div><dt>Total investido</dt><dd>{{ App\Support\CurrencyFormatter::brl($result['total_invested']) }}</dd></div>
-                            <div><dt>Rendimento estimado</dt><dd>{{ App\Support\CurrencyFormatter::brl($result['estimated_earnings']) }}</dd></div>
-                            <div><dt>Taxa anual informada</dt><dd>{{ App\Support\CurrencyFormatter::percentage($result['annual_rate']) }} a.a.</dd></div>
+                            <div><dt>{{ $result['estimated_earnings'] < 0 ? 'Prejuízo estimado' : 'Rendimento estimado' }}</dt><dd>{{ App\Support\CurrencyFormatter::brl($result['estimated_earnings']) }}</dd></div>
+                            <div><dt>Taxa hipotética utilizada</dt><dd>{{ str_replace('.', ',', (string) $result['annual_rate']) }}% a.a.</dd></div>
                             <div><dt>Taxa mensal equivalente</dt><dd>{{ App\Support\CurrencyFormatter::percentage($result['monthly_rate'] * 100, 6) }} a.m.</dd></div>
                             <div><dt>Prazo</dt><dd>{{ $result['months'] }} {{ $result['months'] === 1 ? 'mês' : 'meses' }}</dd></div>
                         </dl>
@@ -146,7 +173,7 @@
                         @if ($selectedInvestment)
                             <div class="simulation-context">
                                 <strong>Cenário hipotético contextualizado como {{ $selectedInvestment->name }}</strong>
-                                <p>A modalidade selecionada serve apenas como contexto educacional. A taxa utilizada no cálculo foi informada por você e não representa a rentabilidade esperada deste investimento.</p>
+                                <p>A taxa utilizada é uma hipótese de cálculo. O retorno efetivo pode variar.</p>
                                 <a href="{{ route('investments.show', $selectedInvestment->slug) }}">Conhecer modalidade <span aria-hidden="true">→</span></a>
                             </div>
                         @endif

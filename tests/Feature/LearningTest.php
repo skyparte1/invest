@@ -81,6 +81,7 @@ class LearningTest extends TestCase
             ->assertSee($content->title)
             ->assertSee($category->name)
             ->assertSee('Texto educacional')
+            ->assertSee('Vídeo complementar')
             ->assertSee($source->institution)
             ->assertSee($source->title);
     }

@@ -94,4 +94,14 @@ class InvestmentSimulationServiceTest extends TestCase
             $this->assertFalse(is_infinite($result[$key]));
         }
     }
+
+    public function test_losses_match_the_chart_and_end_of_month_deposits(): void
+    {
+        $result = $this->service->simulate(1000, 100, -50, 12);
+        $factor = 0.5 ** (1 / 12);
+        $expected = 500 + 100 * (1 - 0.5) / (1 - $factor);
+        $this->assertEqualsWithDelta($expected - 2200, $result['estimated_earnings'], 0.000001);
+        $this->assertSame($result['final_balance'], $result['series'][11]['balance']);
+        $this->assertGreaterThan(0, $this->service->simulate(1000, 0, -99.9999, 12)['final_balance']);
+    }
 }
