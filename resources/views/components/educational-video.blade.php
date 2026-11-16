@@ -1,4 +1,4 @@
-<section class="mt-4" aria-labelledby="video-title">
+<section class="educational-video" aria-labelledby="video-title">
     <h2 id="video-title">Vídeo complementar</h2>
     @if ($embedUrl)
         <p>Aprofunde seus conhecimentos com este conteúdo educativo.</p>

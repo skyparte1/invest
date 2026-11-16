@@ -14,30 +14,39 @@
 
     <section class="dashboard-content" aria-labelledby="dashboard-resources-title">
         <div class="container">
-            <div class="section-heading mb-4">
-                <h2 id="dashboard-resources-title">Continue sua jornada</h2>
-                <p>Todos os recursos do MVP estão disponíveis para você explorar.</p>
+            <h2 class="dashboard-section-title">Sua atividade</h2>
+            <div class="activity-grid">
+                <section class="activity-card">
+                    <h3>Progresso educacional</h3>
+                    <p><strong>{{ $learningSummary['completed'] }} de {{ $learningSummary['total'] }} conteúdos</strong> concluídos</p>
+                    <div class="progress" role="progressbar" aria-label="Progresso educacional" aria-valuenow="{{ $learningSummary['percentage'] }}" aria-valuemin="0" aria-valuemax="100">
+                        <div class="progress-bar" style="width: {{ $learningSummary['percentage'] }}%"></div>
+                    </div>
+                    <a href="{{ route('learn.index') }}">Continuar aprendendo <span aria-hidden="true">→</span></a>
+                </section>
+                <section class="activity-card">
+                    <h3>Planejamento</h3>
+                    @if ($goalSummary['active'] > 0)
+                        <p>Você possui <strong>{{ $goalSummary['active'] }} {{ $goalSummary['active'] === 1 ? 'meta ativa' : 'metas ativas' }}</strong></p>
+                        <a href="{{ route('planning.index') }}">Acompanhar planejamento <span aria-hidden="true">→</span></a>
+                    @else
+                        <p>Você ainda não possui metas ativas.</p>
+                        <a href="{{ route('planning.index') }}">Criar uma meta <span aria-hidden="true">→</span></a>
+                    @endif
+                </section>
+                <section class="activity-card">
+                    <h3>Favoritos</h3>
+                    <p><strong>{{ $favoriteCount }} {{ $favoriteCount === 1 ? 'favorito salvo' : 'favoritos salvos' }}</strong></p>
+                    <a href="{{ route('investments.index', ['favoritos' => 1]) }}">Ver favoritos <span aria-hidden="true">→</span></a>
+                </section>
             </div>
 
-            <div class="dashboard-goals-summary" role="status">
-                @if ($goalSummary['active'] > 0)
-                    <p>Você possui <strong>{{ $goalSummary['active'] }} {{ $goalSummary['active'] === 1 ? 'meta ativa' : 'metas ativas' }}</strong>.</p>
-                    <a href="{{ route('planning.index') }}">Acompanhar planejamento <span aria-hidden="true">→</span></a>
-                @else
-                    <p>Você ainda não possui metas ativas.</p>
-                    <a href="{{ route('planning.index') }}">Criar uma meta <span aria-hidden="true">→</span></a>
-                @endif
-            </div>
-            <div class="row g-3 mb-4">
-                <div class="col-md-8"><div class="dashboard-goals-summary h-100"><p><strong>Progresso educacional: {{ $learningSummary['completed'] }} de {{ $learningSummary['total'] }} conteúdos</strong></p><div class="progress" role="progressbar" aria-label="Progresso educacional" aria-valuenow="{{ $learningSummary['percentage'] }}" aria-valuemin="0" aria-valuemax="100"><div class="progress-bar" style="width: {{ $learningSummary['percentage'] }}%">{{ $learningSummary['percentage'] }}%</div></div><a href="{{ route('learn.index') }}">Continuar aprendendo →</a></div></div>
-                <div class="col-md-4"><div class="dashboard-goals-summary h-100"><p><strong>{{ $favoriteCount }} {{ $favoriteCount === 1 ? 'favorito salvo' : 'favoritos salvos' }}</strong></p><p>Itens para consultar depois, não uma carteira.</p><a href="{{ route('investments.index', ['favoritos' => 1]) }}">Ver favoritos →</a></div></div>
-            </div>
-
+            <h2 class="dashboard-section-title" id="dashboard-resources-title">Explore os módulos</h2>
             <div class="row g-4">
-                <div class="col-md-6 col-xl-3"><article class="dashboard-card dashboard-card-active h-100"><span class="card-icon" aria-hidden="true">01</span><span class="badge text-bg-light">Disponível</span><h3>Aprenda sobre finanças</h3><p>Construa sua base com conteúdos de educação financeira.</p><a class="dashboard-card-link stretched-link" href="{{ route('learn.index') }}">Explorar conteúdos <span aria-hidden="true">→</span></a></article></div>
-                <div class="col-md-6 col-xl-3"><article class="dashboard-card dashboard-card-active h-100"><span class="card-icon" aria-hidden="true">02</span><span class="badge text-bg-light">Disponível</span><h3>Conheça investimentos</h3><p>Entenda características, riscos e diferenças entre modalidades.</p><a class="dashboard-card-link stretched-link" href="{{ route('investments.index') }}">Explorar investimentos <span aria-hidden="true">→</span></a></article></div>
-                <div class="col-md-6 col-xl-3"><article class="dashboard-card dashboard-card-active h-100"><span class="card-icon" aria-hidden="true">03</span><span class="badge text-bg-light">Disponível</span><h3>Simule cenários</h3><p>Visualize como parâmetros hipotéticos podem influenciar uma aplicação.</p><a class="dashboard-card-link stretched-link" href="{{ route('simulator.index') }}">Simular cenário <span aria-hidden="true">→</span></a></article></div>
-                <div class="col-md-6 col-xl-3"><article class="dashboard-card dashboard-card-active h-100"><span class="card-icon" aria-hidden="true">04</span><span class="badge text-bg-light">Disponível</span><h3>Organize seus objetivos</h3><p>Planeje metas e acompanhe sua organização financeira.</p><a class="dashboard-card-link stretched-link" href="{{ route('planning.index') }}">Planejar objetivos <span aria-hidden="true">→</span></a></article></div>
+                <div class="col-md-6 col-xl-3"><article class="dashboard-card dashboard-card-active h-100"><span class="card-icon" aria-hidden="true"><x-icon name="learn" /></span><span class="badge text-bg-light">Disponível</span><h3>Aprenda sobre finanças</h3><p>Construa sua base com conteúdos de educação financeira.</p><a class="dashboard-card-link stretched-link" href="{{ route('learn.index') }}">Explorar conteúdos <span aria-hidden="true">→</span></a></article></div>
+                <div class="col-md-6 col-xl-3"><article class="dashboard-card dashboard-card-active h-100"><span class="card-icon" aria-hidden="true"><x-icon name="investments" /></span><span class="badge text-bg-light">Disponível</span><h3>Conheça investimentos</h3><p>Entenda características, riscos e diferenças entre modalidades.</p><a class="dashboard-card-link stretched-link" href="{{ route('investments.index') }}">Explorar investimentos <span aria-hidden="true">→</span></a></article></div>
+                <div class="col-md-6 col-xl-3"><article class="dashboard-card dashboard-card-active h-100"><span class="card-icon" aria-hidden="true"><x-icon name="simulator" /></span><span class="badge text-bg-light">Disponível</span><h3>Simule cenários</h3><p>Visualize como parâmetros hipotéticos podem influenciar uma aplicação.</p><a class="dashboard-card-link stretched-link" href="{{ route('simulator.index') }}">Simular cenário <span aria-hidden="true">→</span></a></article></div>
+                <div class="col-md-6 col-xl-3"><article class="dashboard-card dashboard-card-active h-100"><span class="card-icon" aria-hidden="true"><x-icon name="planning" /></span><span class="badge text-bg-light">Disponível</span><h3>Organize seus objetivos</h3><p>Planeje metas e acompanhe sua organização financeira.</p><a class="dashboard-card-link stretched-link" href="{{ route('planning.index') }}">Planejar objetivos <span aria-hidden="true">→</span></a></article></div>
             </div>
 
             <div class="dashboard-notice" role="note">

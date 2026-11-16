@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('title', ($content->exists?'Editar':'Novo').' conteúdo | Administração')
 @section('content')
-<main class="container py-5"><h1>{{ $content->exists?'Editar':'Novo' }} conteúdo</h1><x-admin-nav />
+<section class="container admin-workspace py-5"><h1>{{ $content->exists?'Editar':'Novo' }} conteúdo</h1><x-admin-nav />
 @if($errors->any())<div class="alert alert-danger" role="alert"><strong>Revise os campos.</strong><ul>@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul></div>@endif
 <form method="POST" action="{{ $content->exists?route('admin.conteudos.update',$content):route('admin.conteudos.store') }}">@csrf @if($content->exists)@method('PUT')@endif
 <div class="row g-3"><div class="col-md-8"><label class="form-label" for="title">Título</label><input class="form-control" id="title" name="title" value="{{ old('title',$content->title) }}" required></div>
@@ -14,5 +14,5 @@
 <div class="col-md-4"><label class="form-label" for="sort_order">Ordem</label><input class="form-control" type="number" min="0" id="sort_order" name="sort_order" value="{{ old('sort_order',$content->sort_order??0) }}" required></div>
 <div class="col-12"><fieldset><legend class="h5">Fontes</legend>@foreach($sources as $source)<div class="form-check"><input class="form-check-input" type="checkbox" name="sources[]" value="{{ $source->id }}" id="source-{{ $source->id }}" @checked(in_array($source->id,old('sources',$content->exists?$content->sources()->pluck('sources.id')->all():[])))><label class="form-check-label" for="source-{{ $source->id }}">{{ $source->institution }} — {{ $source->title }}</label></div>@endforeach</fieldset></div>
 <div class="col-12"><input type="hidden" name="is_published" value="0"><div class="form-check form-switch"><input class="form-check-input" type="checkbox" id="is_published" name="is_published" value="1" @checked(old('is_published',$content->is_published))><label class="form-check-label" for="is_published">Publicado (exige ao menos uma fonte)</label></div></div></div>
-<div class="mt-4"><button class="btn btn-primary">Salvar</button> <a class="btn btn-link" href="{{ route('admin.conteudos.index') }}">Cancelar</a></div></form></main>
+<div class="mt-4"><button class="btn btn-primary">Salvar</button> <a class="btn btn-link" href="{{ route('admin.conteudos.index') }}">Cancelar</a></div></form></section>
 @endsection

@@ -164,7 +164,7 @@
                             <div><dt>Valor inicial</dt><dd>{{ App\Support\CurrencyFormatter::brl($result['initial_amount']) }}</dd></div>
                             <div><dt>Aportes acumulados</dt><dd>{{ App\Support\CurrencyFormatter::brl($result['contributions_total']) }}</dd></div>
                             <div><dt>Total investido</dt><dd>{{ App\Support\CurrencyFormatter::brl($result['total_invested']) }}</dd></div>
-                            <div><dt>{{ $result['estimated_earnings'] < 0 ? 'Prejuízo estimado' : 'Rendimento estimado' }}</dt><dd>{{ App\Support\CurrencyFormatter::brl($result['estimated_earnings']) }}</dd></div>
+                            <div><dt>{{ $result['estimated_earnings'] < 0 ? 'Prejuízo estimado' : 'Rendimento estimado' }}</dt><dd @class(['amount-loss' => $result['estimated_earnings'] < 0, 'amount-gain' => $result['estimated_earnings'] > 0])>{{ App\Support\CurrencyFormatter::brl($result['estimated_earnings']) }}</dd></div>
                             <div><dt>Taxa hipotética utilizada</dt><dd>{{ str_replace('.', ',', (string) $result['annual_rate']) }}% a.a.</dd></div>
                             <div><dt>Taxa mensal equivalente</dt><dd>{{ App\Support\CurrencyFormatter::percentage($result['monthly_rate'] * 100, 6) }} a.m.</dd></div>
                             <div><dt>Prazo</dt><dd>{{ $result['months'] }} {{ $result['months'] === 1 ? 'mês' : 'meses' }}</dd></div>

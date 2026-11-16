@@ -2,6 +2,7 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
+    @include('layouts.theme')
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="@yield('meta_description', 'Invest: educação financeira acessível para quem quer aprender a investir com mais consciência.')">
     <title>@yield('title', 'Invest | Educação financeira para iniciantes')</title>

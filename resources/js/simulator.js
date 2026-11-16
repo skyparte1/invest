@@ -14,7 +14,9 @@ export function renderSimulationChart(dataElement) {
 
     const series = JSON.parse(dataElement.textContent);
 
-    new Chart(canvas, {
+    const palette = getComputedStyle(canvas);
+    const color = (token) => palette.getPropertyValue(token).trim();
+    const chart = new Chart(canvas, {
         type: 'line',
         data: {
             labels: series.map((point) => `Mês ${point.month}`),
@@ -22,8 +24,9 @@ export function renderSimulationChart(dataElement) {
                 {
                     label: 'Total investido',
                     data: series.map((point) => point.invested),
-                    borderColor: '#6c7b91',
-                    backgroundColor: 'rgba(108, 123, 145, 0.08)',
+                    borderColor: () => color('--muted'),
+                    backgroundColor: () => color('--muted'),
+                    borderDash: [6, 4],
                     borderWidth: 2,
                     pointRadius: 0,
                     pointHoverRadius: 4,
@@ -32,8 +35,8 @@ export function renderSimulationChart(dataElement) {
                 {
                     label: 'Saldo estimado',
                     data: series.map((point) => point.balance),
-                    borderColor: '#1857c9',
-                    backgroundColor: 'rgba(24, 87, 201, 0.10)',
+                    borderColor: () => color('--primary'),
+                    backgroundColor: () => color('--primary'),
                     borderWidth: 3,
                     pointRadius: 0,
                     pointHoverRadius: 4,
@@ -43,6 +46,8 @@ export function renderSimulationChart(dataElement) {
         },
         options: {
             responsive: true,
+            animation: false,
+            color: () => color('--ink'),
             maintainAspectRatio: false,
             interaction: {
                 intersect: false,
@@ -51,20 +56,27 @@ export function renderSimulationChart(dataElement) {
             scales: {
                 x: {
                     grid: { display: false },
-                    ticks: { maxTicksLimit: 12 },
+                    border: { color: () => color('--line') },
+                    ticks: { maxTicksLimit: 8, color: () => color('--muted') },
                 },
                 y: {
                     beginAtZero: true,
+                    border: { display: false },
+                    grid: { color: () => color('--line') },
                     ticks: {
+                        color: () => color('--muted'),
                         callback: (value) => currencyFormatter.format(value),
                     },
                 },
             },
             plugins: {
                 legend: {
-                    labels: { usePointStyle: true },
+                    labels: { color: () => color('--ink'), boxWidth: 24, boxHeight: 2 },
                 },
                 tooltip: {
+                    backgroundColor: () => color('--ink'),
+                    titleColor: () => color('--surface'),
+                    bodyColor: () => color('--surface'),
                     callbacks: {
                         label: (context) => `${context.dataset.label}: ${currencyFormatter.format(context.parsed.y)}`,
                     },
@@ -72,4 +84,5 @@ export function renderSimulationChart(dataElement) {
             },
         },
     });
+    window.addEventListener('invest:themechange', () => chart.update('none'));
 }

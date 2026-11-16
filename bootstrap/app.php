@@ -34,7 +34,9 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->append(SecurityHeaders::class);
         $middleware->redirectGuestsTo(fn () => route('login'));
-        $middleware->redirectUsersTo(fn () => route('dashboard'));
+        $middleware->redirectUsersTo(fn (Request $request) => route(
+            $request->user()->is_admin ? 'admin.dashboard' : 'dashboard'
+        ));
         $middleware->alias(['admin' => AdminMiddleware::class]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

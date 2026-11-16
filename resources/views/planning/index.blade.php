@@ -102,7 +102,7 @@
                                             <label class="form-label" for="aporte-{{ $goal->id }}">Novo aporte (R$)</label>
                                             <div class="input-group">
                                                 <input class="form-control" id="aporte-{{ $goal->id }}" name="amount" inputmode="decimal" required>
-                                                <button class="btn btn-outline-primary">Adicionar aporte</button>
+                                                <button class="btn btn-primary">Adicionar aporte</button>
                                             </div>
                                             @foreach ($errors->getBag('goal'.$goal->id)->all() as $message)
                                                 <p class="text-danger" role="alert">{{ $message }}</p>

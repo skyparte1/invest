@@ -2,7 +2,7 @@
 
 @section('content')
     <section class="hero" id="inicio">
-        <div class="container"><div class="row align-items-center g-5">
+        <div class="container"><div class="row align-items-center gy-4 gx-lg-5">
             <div class="col-lg-7">
                 <span class="eyebrow">Educação financeira descomplicada</span>
                 <h1>Aprenda a investir com mais consciência.</h1>
@@ -10,12 +10,21 @@
                 <div class="d-flex flex-column flex-sm-row gap-3 mt-4"><a class="btn btn-primary btn-lg" href="{{ auth()->check() ? route('dashboard') : route('register') }}">Começar agora</a><a class="btn btn-outline-primary btn-lg" href="#como-funciona">Conhecer a plataforma</a></div>
                 <p class="hero-note">Conhecimento para apoiar suas escolhas, no seu ritmo e sem complicação.</p>
             </div>
-            <div class="col-lg-5" aria-hidden="true">
-                <div class="hero-visual">
-                    <div class="visual-card visual-card-main"><span class="visual-label">Sua jornada</span><strong>Conhecimento que cresce com você</strong><div class="progress-steps"><span class="active"></span><span class="active"></span><span></span><span></span></div></div>
-                    <div class="visual-card visual-card-small"><span class="visual-icon">✓</span><span><strong>Passo a passo</strong><small>Conteúdo claro e prático</small></span></div>
-                    <div class="visual-orbit orbit-one"></div><div class="visual-orbit orbit-two"></div>
-                </div>
+            <div class="col-lg-5">
+                <nav class="module-panel" aria-labelledby="module-title">
+                    <h2 id="module-title">Explore a Invest</h2>
+                    @foreach ([
+                        ['learn', 'Aprender', 'Conceitos de educação financeira'],
+                        ['investments', 'Investimentos', 'Modalidades, riscos e liquidez'],
+                        ['simulator', 'Simulador', 'Projeções com valores hipotéticos'],
+                    ] as [$module, $label, $description])
+                        <a href="{{ route($module.'.index') }}">
+                            <span class="module-icon"><x-icon :name="$module" /></span>
+                            <span><strong>{{ $label }}</strong><small>{{ $description }}</small></span>
+                            <span class="module-arrow" aria-hidden="true">↗</span>
+                        </a>
+                    @endforeach
+                </nav>
             </div>
         </div></div>
     </section>
@@ -24,10 +33,10 @@
         <div class="container">
             <div class="section-heading text-center"><span class="eyebrow">Tudo em um só lugar</span><h2 id="beneficios-title">Construa uma base financeira mais sólida</h2><p>Do primeiro conceito ao planejamento dos seus objetivos, a Invest acompanha cada etapa do aprendizado.</p></div>
             <div class="row g-4">
-                <div class="col-sm-6 col-lg-3"><article class="benefit-card h-100"><span class="card-icon" aria-hidden="true">01</span><h3><a href="{{ route('learn.index') }}">Aprenda</a></h3><p>Conteúdos de educação financeira desenvolvidos para iniciantes.</p></article></div>
-                <div class="col-sm-6 col-lg-3"><article class="benefit-card h-100"><span class="card-icon" aria-hidden="true">02</span><h3><a href="{{ route('investments.index') }}">Conheça</a></h3><p>Entenda diferentes modalidades de investimento, riscos e características.</p></article></div>
-                <div class="col-sm-6 col-lg-3"><article class="benefit-card h-100"><span class="card-icon" aria-hidden="true">03</span><h3><a href="{{ route('simulator.index') }}">Simule</a></h3><p>Visualize cenários hipotéticos de investimento por meio de ferramentas interativas.</p></article></div>
-                <div class="col-sm-6 col-lg-3"><article class="benefit-card h-100"><span class="card-icon" aria-hidden="true">04</span><h3><a href="{{ route('planning.index') }}">Planeje</a></h3><p>Organize sua vida financeira e estabeleça objetivos.</p></article></div>
+                <div class="col-sm-6 col-lg-3"><article class="benefit-card h-100"><span class="card-icon" aria-hidden="true"><x-icon name="learn" /></span><h3><a href="{{ route('learn.index') }}">Aprenda</a></h3><p>Conteúdos de educação financeira desenvolvidos para iniciantes.</p></article></div>
+                <div class="col-sm-6 col-lg-3"><article class="benefit-card h-100"><span class="card-icon" aria-hidden="true"><x-icon name="investments" /></span><h3><a href="{{ route('investments.index') }}">Conheça</a></h3><p>Entenda diferentes modalidades de investimento, riscos e características.</p></article></div>
+                <div class="col-sm-6 col-lg-3"><article class="benefit-card h-100"><span class="card-icon" aria-hidden="true"><x-icon name="simulator" /></span><h3><a href="{{ route('simulator.index') }}">Simule</a></h3><p>Visualize cenários hipotéticos de investimento por meio de ferramentas interativas.</p></article></div>
+                <div class="col-sm-6 col-lg-3"><article class="benefit-card h-100"><span class="card-icon" aria-hidden="true"><x-icon name="planning" /></span><h3><a href="{{ route('planning.index') }}">Planeje</a></h3><p>Organize sua vida financeira e estabeleça objetivos.</p></article></div>
             </div>
         </div>
     </section>

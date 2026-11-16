@@ -87,6 +87,32 @@ class AuthenticationTest extends TestCase
         $this->actingAs($user)->get('/login')->assertRedirect(route('dashboard'));
     }
 
+    public function test_admin_can_sign_in_with_the_checked_remember_field_and_open_the_admin_panel(): void
+    {
+        $admin = User::factory()->create(['password' => 'password123', 'is_admin' => true]);
+
+        $this->post('/login', [
+            'email' => $admin->email,
+            'password' => 'password123',
+            'remember' => '1',
+        ])->assertSessionHasNoErrors()
+            ->assertRedirect(route('admin.dashboard'))
+            ->assertCookie(Auth::guard()->getRecallerName());
+
+        $this->assertAuthenticatedAs($admin);
+        $this->get('/admin')->assertOk();
+        $this->get('/login')->assertRedirect(route('admin.dashboard'));
+    }
+
+    public function test_an_admin_signing_in_from_a_protected_page_returns_to_that_page(): void
+    {
+        $admin = User::factory()->create(['password' => 'password123', 'is_admin' => true]);
+        $this->get(route('admin.fontes.index'))->assertRedirect(route('login'));
+
+        $this->post('/login', ['email' => $admin->email, 'password' => 'password123'])
+            ->assertRedirect(route('admin.fontes.index'));
+    }
+
     public function test_intended_destination_is_respected_after_login(): void
     {
         $user = User::factory()->create(['password' => 'password123']);
