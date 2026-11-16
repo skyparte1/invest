@@ -398,6 +398,8 @@ O workflow [`.github/workflows/ci.yml`](.github/workflows/ci.yml) é executado e
 
 ## Hipóteses do simulador
 
+Após calcular, o usuário pode salvar o cenário e consultar seus parâmetros e saldo estimado em **Minhas simulações salvas**. A seleção de uma modalidade exibe risco, liquidez e rentabilidade conceitual do catálogo. No planejamento, **Adicionar aporte** soma o valor ao acumulado da meta e atualiza seu progresso.
+
 O simulador aplica somente matemática financeira aos parâmetros informados pelo usuário. A taxa anual hipotética `r` é convertida para a taxa mensal equivalente:
 
 ```text
@@ -424,6 +426,6 @@ Ainda não implementado:
 
 - quizzes e outros recursos personalizados de aprendizagem;
 - comparador, carteira e acompanhamento de investimentos do usuário;
-- histórico de simulações e histórico detalhado de aportes em metas;
+- histórico detalhado de aportes em metas;
 - orçamento doméstico, receitas, despesas e transações;
 - integrações com dados externos.

@@ -6,6 +6,7 @@ use App\Http\Requests\StoreFinancialGoalRequest;
 use App\Http\Requests\UpdateFinancialGoalRequest;
 use App\Models\FinancialGoal;
 use App\Services\FinancialGoalProgressService;
+use App\Support\DecimalNormalizer;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -39,6 +40,31 @@ class FinancialPlanningController extends Controller
         Gate::authorize('update', $financialGoal);
 
         return view('planning.edit', compact('financialGoal'));
+    }
+
+    public function contribute(Request $request, FinancialGoal $financialGoal): RedirectResponse
+    {
+        Gate::authorize('update', $financialGoal);
+
+        $bag = 'goal'.$financialGoal->id;
+        $request->merge(['amount' => DecimalNormalizer::normalize($request->input('amount'))]);
+        $data = $request->validateWithBag($bag, [
+            'amount' => ['required', 'numeric', 'decimal:0,2', 'min:0.01', 'max:1000000000'],
+            'previous_amount' => ['required', 'numeric', 'min:0', 'max:1000000000'],
+        ]);
+
+        $total = (round((float) $data['previous_amount'] * 100) + round((float) $data['amount'] * 100)) / 100;
+        if ($total > 1000000000) {
+            return to_route('planning.index')->withErrors(['amount' => 'O total acumulado excederia o limite da meta.'], $bag);
+        }
+
+        $updated = $request->user()->financialGoals()->whereKey($financialGoal->id)
+            ->where('current_amount', $data['previous_amount'])->update(['current_amount' => $total]);
+        if (! $updated) {
+            return to_route('planning.index')->withErrors(['amount' => 'O saldo já mudou. Confira o valor antes de adicionar outro aporte.'], $bag);
+        }
+
+        return to_route('planning.index')->with('status', 'Aporte adicionado.');
     }
 
     public function update(UpdateFinancialGoalRequest $request, FinancialGoal $financialGoal): RedirectResponse

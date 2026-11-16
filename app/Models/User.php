@@ -50,6 +50,11 @@ class User extends Authenticatable
         ];
     }
 
+    public function simulations(): HasMany
+    {
+        return $this->hasMany(Simulation::class);
+    }
+
     public function financialGoals(): HasMany
     {
         return $this->hasMany(FinancialGoal::class);

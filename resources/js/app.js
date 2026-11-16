@@ -33,6 +33,13 @@ window.addEventListener('pageshow', () => {
 
 const simulationChartData = document.getElementById('simulation-chart-data');
 
+const modality = document.getElementById('investment_slug');
+modality?.addEventListener('change', () => {
+    document.querySelectorAll('[data-context-slug]').forEach((section) => {
+        section.hidden = section.dataset.contextSlug !== modality.value;
+    });
+});
+
 if (simulationChartData) {
     import('./simulator').then(({ renderSimulationChart }) => renderSimulationChart(simulationChartData));
 }

@@ -183,6 +183,19 @@ class FinancialPlanningTest extends TestCase
         $this->assertDatabaseHas('financial_goals', ['id' => $goal->id, 'user_id' => $owner->id]);
     }
 
+    public function test_quick_contribution_updates_only_the_owners_goal_once(): void
+    {
+        $owner = User::factory()->create();
+        $goal = $this->goal($owner);
+        $url = route('planning.contribute', $goal);
+        $data = ['previous_amount' => '2000.00', 'amount' => '1.500,15'];
+        $this->post($url, $data)->assertRedirect(route('login'));
+        $this->actingAs(User::factory()->create())->post($url, $data)->assertForbidden();
+        $this->actingAs($owner)->post($url, $data)->assertRedirect(route('planning.index'));
+        $this->post($url, $data)->assertSessionHasErrorsIn('goal'.$goal->id, 'amount');
+        $this->assertSame('3500.15', $goal->fresh()->current_amount);
+    }
+
     private function validPayload(array $overrides = []): array
     {
         return array_merge([

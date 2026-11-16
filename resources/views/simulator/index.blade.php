@@ -8,6 +8,7 @@
         <div class="container">
             <span class="eyebrow">Ferramenta educacional</span>
             <h1 id="simulator-title">Simule um cenário hipotético</h1>
+            <a href="{{ route('simulator.history') }}">Minhas simulações salvas</a>
             <p>Informe seus próprios parâmetros para visualizar matematicamente a evolução de um capital. Nenhuma taxa de mercado é consultada ou sugerida pela Invest.</p>
         </div>
     </section>
@@ -96,6 +97,19 @@
                             </div>
                         </div>
 
+                        @foreach ($investments as $investment)
+                            <section class="simulation-context mt-3" data-context-slug="{{ $investment->slug }}" @if (old('investment_slug', $selectedInvestment?->slug) !== $investment->slug) hidden @endif>
+                                <h3>{{ $investment->name }}</h3>
+                                <p>{{ $investment->short_description }}</p>
+                                <dl>
+                                    <dt>Risco</dt><dd>{{ $investment->riskLabel() }}</dd>
+                                    <dt>Liquidez</dt><dd>{{ $investment->liquidity_description }}</dd>
+                                    <dt>Rentabilidade conceitual</dt><dd>{{ $investment->profitability_description }}</dd>
+                                </dl>
+                                <a href="{{ route('investments.show', $investment->slug) }}">Consultar detalhes e fontes</a>
+                            </section>
+                        @endforeach
+
                         <p class="term-limit" id="term-help">Prazo máximo: 100 anos ou 1.200 meses.</p>
                         <button class="btn btn-primary btn-lg w-100" type="submit">Simular cenário</button>
                     </form>
@@ -105,6 +119,14 @@
                     @if ($result)
                         <span class="eyebrow">Resultado bruto</span>
                         <h2 id="summary-title">Resumo do cenário</h2>
+                        <form method="POST" action="{{ route('simulator.save') }}" data-disable-on-submit>
+                            @csrf
+                            <input type="hidden" name="submission_id" value="{{ Illuminate\Support\Str::uuid() }}">
+                            @foreach ($form as $field => $value)
+                                <input type="hidden" name="{{ $field }}" value="{{ $value }}">
+                            @endforeach
+                            <button class="btn btn-outline-primary" type="submit">Salvar esta simulação</button>
+                        </form>
 
                         <div class="result-highlight">
                             <span>Saldo estimado</span>

@@ -43,6 +43,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/simulador', [SimulationController::class, 'index'])->name('simulator.index');
     Route::post('/simulador', [SimulationController::class, 'calculate'])->name('simulator.calculate');
+    Route::post('/simulador/historico', [SimulationController::class, 'calculate'])->name('simulator.save');
+    Route::get('/simulador/historico', [SimulationController::class, 'history'])->name('simulator.history');
 
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
     Route::get('/perfil', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -51,6 +53,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/perfil', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/planejamento', [FinancialPlanningController::class, 'index'])->name('planning.index');
     Route::post('/planejamento', [FinancialPlanningController::class, 'store'])->name('planning.store');
+    Route::post('/planejamento/{financialGoal}/aportes', [FinancialPlanningController::class, 'contribute'])->name('planning.contribute');
     Route::get('/planejamento/{financialGoal}/editar', [FinancialPlanningController::class, 'edit'])->name('planning.edit');
     Route::match(['put', 'patch'], '/planejamento/{financialGoal}', [FinancialPlanningController::class, 'update'])->name('planning.update');
     Route::delete('/planejamento/{financialGoal}', [FinancialPlanningController::class, 'destroy'])->name('planning.destroy');

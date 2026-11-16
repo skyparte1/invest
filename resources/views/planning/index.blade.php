@@ -96,6 +96,18 @@
                                     </dl>
 
                                     <div class="goal-reference">
+                                        <form method="POST" action="{{ route('planning.contribute', $goal) }}" data-disable-on-submit class="mb-3">
+                                            @csrf
+                                            <input type="hidden" name="previous_amount" value="{{ $goal->current_amount }}">
+                                            <label class="form-label" for="aporte-{{ $goal->id }}">Novo aporte (R$)</label>
+                                            <div class="input-group">
+                                                <input class="form-control" id="aporte-{{ $goal->id }}" name="amount" inputmode="decimal" required>
+                                                <button class="btn btn-outline-primary">Adicionar aporte</button>
+                                            </div>
+                                            @foreach ($errors->getBag('goal'.$goal->id)->all() as $message)
+                                                <p class="text-danger" role="alert">{{ $message }}</p>
+                                            @endforeach
+                                        </form>
                                         @if ($metrics['completed'])
                                             <strong>{{ $metrics['surpassed'] ? 'Meta superada' : 'Meta atingida' }}</strong>
                                             <p>O valor acumulado alcançou o valor-alvo informado.</p>

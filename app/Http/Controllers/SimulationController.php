@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\SimulationRequest;
 use App\Models\Investment;
 use App\Services\InvestmentSimulationService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -20,7 +21,14 @@ class SimulationController extends Controller
         return $this->render($this->defaults($selectedInvestment?->slug), $selectedInvestment);
     }
 
-    public function calculate(SimulationRequest $request, InvestmentSimulationService $service): View
+    public function history(Request $request): View
+    {
+        return view('simulator.history', [
+            'simulations' => $request->user()->simulations()->latest('id')->simplePaginate(10),
+        ]);
+    }
+
+    public function calculate(SimulationRequest $request, InvestmentSimulationService $service): View|RedirectResponse
     {
         $validated = $request->validated();
         $selectedInvestment = empty($validated['investment_slug'])
@@ -35,6 +43,21 @@ class SimulationController extends Controller
             $validated['term_unit'],
         );
 
+        if ($request->routeIs('simulator.save')) {
+            $submission = $request->validate(['submission_id' => ['required', 'uuid']]);
+            $request->user()->simulations()->firstOrCreate($submission, [
+                'investment_id' => $selectedInvestment?->id,
+                'investment_name' => $selectedInvestment?->name,
+                'initial_amount' => $result['initial_amount'],
+                'monthly_contribution' => $result['periodic_contribution'],
+                'term_months' => $result['months'],
+                'annual_rate' => $result['annual_rate'],
+                'final_balance' => $result['final_balance'],
+            ]);
+
+            return to_route('simulator.history')->with('status', 'Simulação salva.');
+        }
+
         return $this->render($validated, $selectedInvestment, $result);
     }
 
@@ -42,7 +65,7 @@ class SimulationController extends Controller
     {
         $investments = Investment::published()
             ->orderBy('name')
-            ->get(['name', 'slug']);
+            ->get(['name', 'slug', 'short_description', 'risk_level', 'liquidity_description', 'profitability_description']);
 
         return view('simulator.index', compact('form', 'investments', 'selectedInvestment', 'result'));
     }

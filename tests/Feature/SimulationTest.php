@@ -140,6 +140,22 @@ class SimulationTest extends TestCase
             ->assertSee(route('simulator.index', ['investimento' => $investment->slug]));
     }
 
+    public function test_saving_a_calculated_scenario_is_explicit_private_and_retry_safe(): void
+    {
+        $investment = $this->investment('CDB de exemplo', 'cdb');
+        $payload = $this->validPayload(['investment_slug' => $investment->slug, 'annual_rate' => 0]);
+        $response = $this->post(route('simulator.calculate'), $payload);
+        $response->assertOk()->assertSee('Salvar esta simulação')->assertSee($investment->liquidity_description);
+        $this->assertDatabaseCount('simulations', 0);
+        preg_match('/name="submission_id" value="([^"]+)"/', $response->getContent(), $matches);
+        $payload['submission_id'] = $matches[1];
+        $this->post(route('simulator.save'), $payload)->assertRedirect(route('simulator.history'));
+        $this->post(route('simulator.save'), $payload)->assertRedirect(route('simulator.history'));
+        $this->assertDatabaseCount('simulations', 1);
+        $this->get(route('simulator.history'))->assertSee($investment->name)->assertSee('R$ 13.000,00');
+        $this->actingAs(User::factory()->create())->get(route('simulator.history'))->assertDontSee($investment->name);
+    }
+
     private function validPayload(array $overrides = []): array
     {
         return array_merge([

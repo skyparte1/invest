@@ -51,6 +51,8 @@
 
                 <aside class="article-notice" role="note"><span class="notice-symbol" aria-hidden="true">i</span><p>Conteúdo educacional e informativo. Não constitui recomendação, análise de perfil ou orientação fiscal individual.</p></aside>
 
+                <x-educational-video />
+
                 <section class="article-sources" aria-labelledby="sources-title">
                     <h2 id="sources-title">Fontes e referências</h2>
                     <div class="source-list">
