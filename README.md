@@ -258,7 +258,7 @@ Depois que o domínio público for gerado, ajuste `APP_URL` para a URL HTTPS exa
 
 ### 4. Configurar build, pre-deploy e health check
 
-Deixe **Build Command** e **Start Command** vazios para usar a detecção do Railpack. Em **Pre-deploy Command**, configure:
+Deixe **Build Command** e **Start Command** vazios para usar a detecção do Railpack. O arquivo `railway.toml` define o comando de pre-deploy da aplicação:
 
 ```bash
 php artisan migrate --force && php artisan db:seed --force
