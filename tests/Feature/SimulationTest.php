@@ -8,6 +8,7 @@ use App\Models\Simulation;
 use App\Models\User;
 use App\Services\ReturnReferences;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
@@ -161,6 +162,7 @@ class SimulationTest extends TestCase
 
     public function test_reference_catalog_and_optional_application(): void
     {
+        config(['return_references.indicators.di.date' => '2026-11-10']);
         $this->travelTo(now()->setDate(2026, 11, 15));
         foreach ([
             'poupanca' => ['Poupança'], 'tesouro-selic' => ['Meta Selic'], 'cdb' => ['100% do CDI'],
@@ -188,6 +190,26 @@ class SimulationTest extends TestCase
         $this->get(route('simulator.index'))->assertSee('Sem taxa numérica utilizável')->assertDontSee('Usar esta referência');
         config(['return_references.indicators.di.url' => 'javascript:alert(1)']);
         $this->get(route('simulator.index'))->assertSee('ainda não possui referência validada')->assertDontSee('javascript:alert');
+    }
+
+    public function test_cdb_reference_button_respects_the_seven_day_review_window(): void
+    {
+        $this->investment('CDB', 'cdb');
+        $this->assertSame(7, config('return_references.indicators.di.review_days'));
+        $baseDate = config('return_references.indicators.di.date');
+        foreach ([0, 1, 2, 7, 8] as $days) {
+            $this->travelTo(Carbon::parse($baseDate)->addDays($days));
+            $reference = array_values(ReturnReferences::forModality('cdb'))[0];
+            $this->assertSame($days <= 7, $reference['usable']);
+            $response = $this->get(route('simulator.index', ['investimento' => 'cdb']))->assertOk();
+            if ($days <= 7) {
+                $response->assertSee('aria-label="Usar esta referência: 100% do CDI"', false);
+            } else {
+                $response->assertDontSee('aria-label="Usar esta referência: 100% do CDI"', false)
+                    ->assertSee('Referência desatualizada ou sem data validada.');
+            }
+        }
+        $this->travelBack();
     }
 
     public function test_manual_loss_is_saved_and_invalid_rates_rejected(): void

@@ -9,6 +9,14 @@
 @if($content->exists)<div class="col-12"><label class="form-label" for="slug">Slug</label><input class="form-control" id="slug" name="slug" value="{{ old('slug',$content->slug) }}"><small>Deixe em branco para preservar o atual.</small></div>@endif
 <div class="col-12"><label class="form-label" for="summary">Resumo</label><textarea class="form-control" id="summary" name="summary" rows="3" required>{{ old('summary',$content->summary) }}</textarea></div>
 <div class="col-12"><label class="form-label" for="body">Conteúdo (Markdown seguro)</label><textarea class="form-control font-monospace" id="body" name="body" rows="14" required>{{ old('body',$content->body) }}</textarea></div>
+@unless($content->exists)
+<div class="col-12">
+    <fieldset>
+        <legend class="h5">Vídeo complementar (opcional)</legend>
+        @include('admin.videos.fields')
+    </fieldset>
+</div>
+@endunless
 <div class="col-md-4"><label class="form-label" for="difficulty">Dificuldade</label><select class="form-select" id="difficulty" name="difficulty"><option value="beginner" @selected(old('difficulty',$content->difficulty ?: 'beginner')==='beginner')>Iniciante</option></select></div>
 <div class="col-md-4"><label class="form-label" for="estimated_minutes">Minutos</label><input class="form-control" type="number" min="1" id="estimated_minutes" name="estimated_minutes" value="{{ old('estimated_minutes',$content->estimated_minutes) }}"></div>
 <div class="col-md-4"><label class="form-label" for="sort_order">Ordem</label><input class="form-control" type="number" min="0" id="sort_order" name="sort_order" value="{{ old('sort_order',$content->sort_order??0) }}" required></div>

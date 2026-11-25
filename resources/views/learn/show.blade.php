@@ -49,7 +49,7 @@
                     <p>Conteúdo educacional e informativo. Não constitui recomendação individualizada de investimento.</p>
                 </aside>
 
-                <x-educational-video module="learn" :slug="$content->slug" :topic="$content->title" />
+                <x-educational-video module="learn" :slug="$content->slug" :video="$content->video" :topic="$content->title" />
 
                 <section class="article-sources" aria-labelledby="sources-title">
                     <h2 id="sources-title">Fontes e referências</h2>

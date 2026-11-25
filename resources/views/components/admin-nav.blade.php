@@ -3,4 +3,5 @@
     <a class="nav-link @if(request()->routeIs('admin.conteudos.*')) active @endif" href="{{ route('admin.conteudos.index') }}">Conteúdos</a>
     <a class="nav-link @if(request()->routeIs('admin.investimentos.*')) active @endif" href="{{ route('admin.investimentos.index') }}">Investimentos</a>
     <a class="nav-link @if(request()->routeIs('admin.fontes.*')) active @endif" href="{{ route('admin.fontes.index') }}">Fontes</a>
+    <a class="nav-link @if(request()->routeIs('admin.videos.*')) active @endif" href="{{ route('admin.videos.index') }}">Vídeos</a>
 </nav>

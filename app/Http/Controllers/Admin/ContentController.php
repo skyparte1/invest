@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Content;
 use App\Models\Source;
+use App\Support\VideoInput;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -30,7 +31,11 @@ class ContentController extends Controller
         $data['slug'] = $this->uniqueSlug($data['title']);
         $sources = $data['sources'] ?? [];
         unset($data['sources']);
-        $content = Content::create($data);
+        $content = new Content($data);
+        if ($request->has('url')) {
+            $content->video = VideoInput::validated($request);
+        }
+        $content->save();
         $content->sources()->sync($sources);
 
         return redirect()->route('admin.conteudos.index')->with('status', 'Conteúdo criado.');

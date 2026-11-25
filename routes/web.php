@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\ContentController as AdminContentController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\InvestmentController as AdminInvestmentController;
 use App\Http\Controllers\Admin\SourceController as AdminSourceController;
+use App\Http\Controllers\Admin\VideoController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\ContentProgressController;
@@ -61,6 +62,11 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
         Route::get('/', AdminDashboardController::class)->name('dashboard');
+        Route::get('videos', [VideoController::class, 'index'])->name('videos.index');
+        Route::get('videos/{module}/{id}/editar', [VideoController::class, 'edit'])
+            ->whereIn('module', ['learn', 'investments'])->whereNumber('id')->name('videos.edit');
+        Route::put('videos/{module}/{id}', [VideoController::class, 'update'])
+            ->whereIn('module', ['learn', 'investments'])->whereNumber('id')->name('videos.update');
         Route::resource('conteudos', AdminContentController::class)->parameters(['conteudos' => 'content'])->except('show');
         Route::resource('investimentos', AdminInvestmentController::class)->parameters(['investimentos' => 'investment'])->except('show');
         Route::resource('fontes', AdminSourceController::class)->parameters(['fontes' => 'source'])->except('show');

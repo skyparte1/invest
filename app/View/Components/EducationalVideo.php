@@ -13,9 +13,9 @@ class EducationalVideo extends Component
 
     public ?string $author = null;
 
-    public function __construct(string $module, string $slug, public string $topic)
+    public function __construct(string $module, string $slug, public string $topic, ?array $video = null)
     {
-        $video = config('educational_videos')[$module][$slug] ?? [];
+        $video ??= config('educational_videos')[$module][$slug] ?? [];
         $id = $video['id'] ?? null;
         $start = $video['start'] ?? 0;
         if (! is_string($id) || ! preg_match('/\A[A-Za-z0-9_-]{11}\z/', $id) || ! is_int($start) || $start < 0) {

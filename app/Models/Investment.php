@@ -23,7 +23,7 @@ class Investment extends Model
 
     protected function casts(): array
     {
-        return ['is_published' => 'boolean'];
+        return ['is_published' => 'boolean', 'video' => 'array'];
     }
 
     public function category(): BelongsTo
